@@ -27,11 +27,18 @@ namespace ContaConsola
 
                     else if (answer == "n")
                     {
-                        string id, nombrecuenta, valor, fecha; 
+                        string nombreCuenta, valor, fecha;
+                        int id;
+                        Dictionary<string, int> dict = new Dictionary< string, int>();
 
-                        Console.WriteLine("Cuenta a modificar (ID o nombre): ");
-                        id = Console.ReadLine().ToLower();
-                        nombrecuenta = id;
+                        dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv");
+
+                        Console.WriteLine("Nombre de la cuenta a modificar: ");
+                        nombreCuenta = Console.ReadLine().ToLower();
+
+                        dict.TryGetValue(nombreCuenta, out id);
+
+                        Console.WriteLine(id);
 
                         Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nLo mismo al contrario del resto de cuentas:");
                         valor = Console.ReadLine().ToLower();

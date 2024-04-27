@@ -32,7 +32,7 @@ namespace ContaConsola
                     using (StreamWriter sw = File.CreateText(filePath))
                     {
                         sw.WriteLine("1;Activos");
-                        sw.WriteLine("11;Corrientes");
+                        sw.WriteLine("11;Activos Corrientes");
                         sw.WriteLine("111;Caja");
                         sw.WriteLine("112;Bancos");
                         sw.WriteLine("113;Inventarios");
@@ -41,7 +41,7 @@ namespace ContaConsola
                         sw.WriteLine("116;Seguros por cobrar");
                         sw.WriteLine("117;IVA por cobrar");
                         sw.WriteLine("118;Inversiones");
-                        sw.WriteLine("12;No corrientes");
+                        sw.WriteLine("12;Activos No corrientes");
                         sw.WriteLine("121;Activos fijos	");
                         sw.WriteLine("1211;Terrenos");
                         sw.WriteLine("1212;Maquinaria");
@@ -49,7 +49,7 @@ namespace ContaConsola
                         sw.WriteLine("1214;Mobiliario y equipo");
                         sw.WriteLine("1215;Equipo de computo");
                         sw.WriteLine("2;Pasivo");
-                        sw.WriteLine("21;Corrientes");
+                        sw.WriteLine("21;Pasivos No corrientes");
                         sw.WriteLine("211;Cuota patronal por pagar");
                         sw.WriteLine("212;Cuota laboral por pagar");
                         sw.WriteLine("213;Prestamos Bancarios");
@@ -59,7 +59,7 @@ namespace ContaConsola
                         sw.WriteLine("217;Documentos por pagar");
                         sw.WriteLine("3;Patrimonio");
                         sw.WriteLine("31;Utilidades de años anteriores");
-                        sw.WriteLine("32;Patrimonio");
+                        sw.WriteLine("32;patrimonio");
                         sw.WriteLine("33;Reserva legal");
                         sw.WriteLine("4;Ingresos");
                         sw.WriteLine("41;Ventas");
@@ -147,8 +147,10 @@ namespace ContaConsola
             }
         }
 
-        public static Dictionary<int, string> Lectura(string path)
+        public static Dictionary<string, int> Lectura(string path)
         {
+            Dictionary<string, int> diccionario = new Dictionary<string, int>();
+
             try
             {
                 if (!File.Exists(path))
@@ -169,23 +171,28 @@ namespace ContaConsola
                         {
                             if (i < ids.Length - 1)
                             {
-                                string idCode = ids[i];
+                                /*string idCode = ids[i];
 
                                 for (int e = 0; e < idCode.Length; e++)
                                 {
                                     if (idCode[e] == 1) { Console.WriteLine("Es activo"); }
                                     if (idCode[e] == 2) { Console.WriteLine("Es pasivo"); }
+                                }*/
+
+                                while (ids[i].Length < 6)
+                                {
+                                    ids[i] = "0" + ids[i];
                                 }
 
-                                switch (idCode)
-                                {
-                                    case "1":
-                                        Console.WriteLine("Es activo");
-                                        break;
-                                    case "2":
-                                        Console.WriteLine("Es pasivo");
-                                        break;
-                                }
+                                Thread.Sleep(50);
+
+                                diccionario.Add(ids[i + 1], Convert.ToInt32(ids[i]));
+                                
+                                int asdInt;
+                                diccionario.TryGetValue(ids[i + 1], out asdInt);
+
+                                Console.WriteLine($"{ids[i + 1]} | {asdInt}");
+
                                 continue;
                             }
                             else
@@ -202,12 +209,6 @@ namespace ContaConsola
             {
                 Console.WriteLine(ex.ToString());
             }
-
-            string nombreCuenta = "AAA";
-            int IDCuenta = 00000;
-            Dictionary<int, string> diccionario = new Dictionary<int, string>();
-
-            diccionario.Add(IDCuenta, nombreCuenta);
 
             return diccionario;
         }
