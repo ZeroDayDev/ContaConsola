@@ -147,7 +147,7 @@ namespace ContaConsola
             }
         }
 
-        public static void Lectura(string path)
+        public static Dictionary<int, string> Lectura(string path)
         {
             try
             {
@@ -192,6 +192,7 @@ namespace ContaConsola
                             {
                                 break;
                             }
+
                         }
                     }
                 }
@@ -201,6 +202,14 @@ namespace ContaConsola
             {
                 Console.WriteLine(ex.ToString());
             }
+
+            string nombreCuenta = "AAA";
+            int IDCuenta = 00000;
+            Dictionary<int, string> diccionario = new Dictionary<int, string>();
+
+            diccionario.Add(IDCuenta, nombreCuenta);
+
+            return diccionario;
         }
     }
 }
