@@ -27,16 +27,25 @@ namespace ContaConsola
 
                     else if (answer == "n")
                     {
+                        /*
+                         * Sistema de partidas manual
+                                                    */
                         string nombreCuenta, valor, fecha;
                         int id;
-                        Dictionary<string, int> dict = new Dictionary< string, int>();
+                        Dictionary<string, int> dict = new Dictionary<string, int>();
 
                         dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv");
 
+                        //INICIO DE PARTIDA
                         Console.WriteLine("Nombre de la cuenta a modificar: ");
-                        nombreCuenta = Console.ReadLine().ToLower();
+                        nombreCuenta = Console.ReadLine();
 
-                        dict.TryGetValue(nombreCuenta, out id);
+                        if(!dict.TryGetValue(nombreCuenta, out id))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"No existe la cuenta {nombreCuenta}");
+                            return;
+                        }
 
                         Console.WriteLine(id);
 
@@ -46,7 +55,7 @@ namespace ContaConsola
                         Console.WriteLine("¿Fecha del movimiento?");
                         fecha = Console.ReadLine().ToLower();
 
-                        Clases.Cuentas cuenta = new Clases.Cuentas(1, "activo");
+                        Clases.Cuentas cuenta = new Clases.Cuentas(id, "activo");
                     }
 
                     else { Console.Clear(); Console.WriteLine("No respondiste nada, volviendo al menu principal"); }

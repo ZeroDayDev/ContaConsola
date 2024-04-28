@@ -27,10 +27,8 @@ namespace ContaConsola
         {
             private long IDcuenta;
             private string ClasfCuenta;
-            private string[] fechas = Array.Empty<string>();
-            private string[] valores = Array.Empty<string>();
-            public string[] Valores { get => valores; set => valores = value; }
-            public string[] Fechas { get => fechas; set => fechas = value; }
+            public List<string> fechas = new List<string>();
+            public List<string> valores = new List<string>();
             public long ID { get => IDcuenta; }
             public string Clasificacion { get => ClasfCuenta; }
 
@@ -40,6 +38,16 @@ namespace ContaConsola
             {
                 IDcuenta = idConstructor;
                 ClasfCuenta = ClasificacionCuenta;
+            }
+
+            public static void IngresoPartida(int id)
+            {
+                switch (id)
+                {
+                    case 1:
+
+                        break;
+                }
             }
         }
 

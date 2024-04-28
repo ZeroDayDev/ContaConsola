@@ -14,11 +14,9 @@ namespace HelloWorld
             int Pointer;
             bool whiling;
 
+            //Redaccion inicial
             FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta");
-            //FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv");
 
-
-            
             whiling = true;
 
             while (whiling)
@@ -80,6 +78,7 @@ namespace HelloWorld
                         break;
                     default:
                         Console.WriteLine("Esa opcion no existe, intentelo de nuevo.");
+                        OpcionElegida();
                         break;
                 }
 
@@ -94,6 +93,7 @@ namespace HelloWorld
                         OpcionElegida();
                         Console.Clear();
                         Nomenclaturas.Funciones(Pointer);
+                        Console.Clear();
                         break;
                     case 3:
                         Console.WriteLine("A programar!");

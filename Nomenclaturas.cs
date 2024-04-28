@@ -18,7 +18,6 @@ namespace HelloWorld
                     FileManagerSystem.VisualizarNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv");
                     Console.WriteLine("\nPulsa cualquier tecla para salir");
                     Console.Read();
-                    Console.Clear();
                     break;
             }
         }
