@@ -48,7 +48,7 @@ namespace ContaConsola
                         sw.WriteLine("1213;Vehiculos");
                         sw.WriteLine("1214;Mobiliario y equipo");
                         sw.WriteLine("1215;Equipo de computo");
-                        sw.WriteLine("2;Pasivo");
+                        sw.WriteLine("2;Pasivos");
                         sw.WriteLine("21;Pasivos No corrientes");
                         sw.WriteLine("211;Cuota patronal por pagar");
                         sw.WriteLine("212;Cuota laboral por pagar");
@@ -147,7 +147,7 @@ namespace ContaConsola
             }
         }
 
-        public static Dictionary<string, int> Lectura(string path)
+        public static Dictionary<string, int> Lectura(string path, bool print)
         {
             Dictionary<string, int> diccionario = new Dictionary<string, int>();
 
@@ -191,7 +191,7 @@ namespace ContaConsola
                                 int asdInt;
                                 diccionario.TryGetValue(ids[i + 1], out asdInt);
 
-                                Console.WriteLine($"{ids[i + 1]} | {asdInt}");
+                                if (print) { Console.WriteLine($"{ids[i + 1]} | {asdInt}"); }
 
                                 continue;
                             }

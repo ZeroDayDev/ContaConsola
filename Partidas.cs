@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelloWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +11,7 @@ namespace ContaConsola
     internal class Partidas
     {
         
-        public static void Funciones(int Pointer)
+        public static void Funciones(int Pointer, List<Clases.Cuentas> listaCuentas)
         {
             string answer;
 
@@ -32,22 +33,23 @@ namespace ContaConsola
                                                     */
                         string nombreCuenta, valor, fecha;
                         int id;
+
                         Dictionary<string, int> dict = new Dictionary<string, int>();
 
-                        dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv");
+                        dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
 
                         //INICIO DE PARTIDA
                         Console.WriteLine("Nombre de la cuenta a modificar: ");
                         nombreCuenta = Console.ReadLine();
 
-                        if(!dict.TryGetValue(nombreCuenta, out id))
+                        if (!dict.TryGetValue(nombreCuenta, out id))
                         {
                             Console.Clear();
                             Console.WriteLine($"No existe la cuenta {nombreCuenta}");
                             return;
                         }
 
-                        Console.WriteLine(id);
+
 
                         Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nLo mismo al contrario del resto de cuentas:");
                         valor = Console.ReadLine().ToLower();
@@ -55,7 +57,14 @@ namespace ContaConsola
                         Console.WriteLine("¿Fecha del movimiento?");
                         fecha = Console.ReadLine().ToLower();
 
-                        Clases.Cuentas cuenta = new Clases.Cuentas(id, "activo");
+                        foreach(var cuenta in listaCuentas)
+                        {
+                            if (cuenta.ID == id)
+                            {
+                                cuenta.IngresoPartida(fecha, valor, nombreCuenta);
+                            }
+                        }
+
                     }
 
                     else { Console.Clear(); Console.WriteLine("No respondiste nada, volviendo al menu principal"); }

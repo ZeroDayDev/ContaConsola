@@ -6,16 +6,49 @@ using System.Text;
 namespace HelloWorld
 {
 
+    class Basics
+    {
+        
+
+        public static List<Clases.Cuentas> ExecOrigins()
+        {
+            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta");
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+
+            string clasificacionCuenta;
+            List<Clases.Cuentas> cuentas = new List<Clases.Cuentas>();
+
+            dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
+
+
+            //Registro de cuentas tras guardado de datos en diccionario
+            foreach (var item in dict)
+            {
+                clasificacionCuenta = Clases.Cuentas.RegistroClasf(item.Value);
+
+                Console.WriteLine($"{item.Key} | {clasificacionCuenta}");
+
+                Clases.Cuentas cuenta = new Clases.Cuentas(item.Value, clasificacionCuenta);
+                cuentas.Add(cuenta);
+            }
+
+            return cuentas;
+
+        }
+    }
+
     class Program
     {
+
         static void Main(string[] args)
         {
+            List<Clases.Cuentas> cuentas = new List<Clases.Cuentas>();
+            cuentas = Basics.ExecOrigins();
+            
+
             //Variables para apuntar y mantener ciclos
             int Pointer;
             bool whiling;
-
-            //Redaccion inicial
-            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta");
 
             whiling = true;
 
@@ -87,7 +120,7 @@ namespace HelloWorld
                     case 1:
                         OpcionElegida();
                         Console.Clear();
-                        Partidas.Funciones(Pointer);
+                        Partidas.Funciones(Pointer, cuentas);
                         break;
                     case 2:
                         OpcionElegida();
@@ -122,4 +155,6 @@ namespace HelloWorld
             }
         }
     }
+
+
 }
