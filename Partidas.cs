@@ -13,6 +13,11 @@ namespace ContaConsola
         
         public static void Funciones(int Pointer, List<Clases.Cuentas> listaCuentas)
         {
+            string nombreCuenta, valor, fecha;
+            int id;
+
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+
             string answer;
 
             switch (Pointer)
@@ -31,10 +36,7 @@ namespace ContaConsola
                         /*
                          * Sistema de partidas manual
                                                     */
-                        string nombreCuenta, valor, fecha;
-                        int id;
 
-                        Dictionary<string, int> dict = new Dictionary<string, int>();
 
                         dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
 
@@ -51,7 +53,7 @@ namespace ContaConsola
 
 
 
-                        Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nLo mismo al contrario del resto de cuentas:");
+                        Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nSi disminuye, ponerlo en negativo:");
                         valor = Console.ReadLine().ToLower();
 
                         Console.WriteLine("¿Fecha del movimiento?");
@@ -69,6 +71,32 @@ namespace ContaConsola
 
                     else { Console.Clear(); Console.WriteLine("No respondiste nada, volviendo al menu principal"); }
                     
+                    break;
+
+                case 4:
+                    //INICIO DE PARTIDA
+                    dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
+
+                    Console.WriteLine("Nombre de la cuenta a visualizar: ");
+                    nombreCuenta = Console.ReadLine();
+
+                    if (!dict.TryGetValue(nombreCuenta, out id))
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"No existe la cuenta {nombreCuenta}");
+                        return;
+                    }
+
+                    foreach (var cuenta in listaCuentas)
+                    {
+                        if (cuenta.ID == id)
+                        {
+                            Console.WriteLine("FECHAS    |    VALORES");
+                            cuenta.fechas.ForEach(fechas => Console.Write(fechas));
+                            Console.Write("  |  ");
+                            cuenta.valores.ForEach(valores => Console.Write(valores + "\n"));
+                        }
+                    }
                     break;
             }
         }

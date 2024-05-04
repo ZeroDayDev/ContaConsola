@@ -26,7 +26,7 @@ namespace HelloWorld
             {
                 clasificacionCuenta = Clases.Cuentas.RegistroClasf(item.Value);
 
-                Console.WriteLine($"{item.Key} | {clasificacionCuenta}");
+                //Console.WriteLine($"{item.Key} | {clasificacionCuenta}");
 
                 Clases.Cuentas cuenta = new Clases.Cuentas(item.Value, clasificacionCuenta);
                 cuentas.Add(cuenta);
