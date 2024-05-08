@@ -41,7 +41,7 @@ namespace ContaConsola
                         dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
 
                         //INICIO DE PARTIDA
-                        Console.WriteLine("Nombre de la cuenta a modificar: ");
+                        Console.WriteLine("\nNombre de la cuenta a modificar: ");
                         nombreCuenta = Console.ReadLine();
 
                         if (!dict.TryGetValue(nombreCuenta, out id))
@@ -91,10 +91,19 @@ namespace ContaConsola
                     {
                         if (cuenta.ID == id)
                         {
+                            string fechasConsola = "", valoresConsola = "";
+
                             Console.WriteLine("FECHAS    |    VALORES");
-                            cuenta.fechas.ForEach(fechas => Console.Write(fechas));
-                            Console.Write("  |  ");
-                            cuenta.valores.ForEach(valores => Console.Write(valores + "\n"));
+
+                            foreach(var f in cuenta.fechas)
+                            {
+                                fechasConsola = fechasConsola + f.ToString();
+                                foreach(var v in cuenta.valores)
+                                {
+                                    Console.Write(v.ToString() + "\n");
+                                }
+                            }
+                            
                         }
                     }
                     break;
