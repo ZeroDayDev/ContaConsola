@@ -34,7 +34,7 @@
                 ClasfCuenta = ClasificacionCuenta;
             }
 
-            public void IngresoPartida(string fecha, string valor, string nombreCuenta)
+            public string IngresoPartida(string fecha, string valor, string nombreCuenta)
             {
                 if (Clasificacion == "Activos" || Clasificacion == "Activos Corrientes" || Clasificacion == "Activos No corrientes" || Clasificacion == "Activos Fijos" || Clasificacion == "Gastos" || Clasificacion == "Costo de venta")
                 {
@@ -43,7 +43,7 @@
 
                 else if (Clasificacion == "Pasivos" || Clasificacion == "Pasivos No corrientes" || Clasificacion == "Patrimonio" || Clasificacion == "Ingresos")
                 {
-                    int valorNum = Convert.ToInt32(valor);
+                    double valorNum = Convert.ToDouble(valor);
 
                     valorNum = valorNum * -1;
                     string valorStr = Convert.ToString(valorNum);
@@ -55,6 +55,8 @@
                 
 
                 Console.WriteLine($"Se ha hecho un ingreso en la fecha {Convert.ToString(DateTime.Parse(fecha))}, con un valor positivo de {valor} en la cuenta {nombreCuenta}");
+
+                return Clasificacion;
             }
 
             public static string RegistroClasf(int id)

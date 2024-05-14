@@ -12,7 +12,8 @@ namespace HelloWorld
 
         public static List<Clases.Cuentas> ExecOrigins()
         {
-            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta");
+            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta", @"c:\ProgramaConta\Partidas");
+            FileManagerSystem.CreacionPartida();
             Dictionary<string, int> dict = new Dictionary<string, int>();
 
             string clasificacionCuenta;

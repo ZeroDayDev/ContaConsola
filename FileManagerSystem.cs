@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Drawing;
 
 namespace ContaConsola
 {
     public class FileManagerSystem
     {
-        public static void EscrituraInicial(string path)
+        public static void EscrituraInicial(string pathRaiz, string pathPartidas)
         {
             //Creacion de nomenclatura ejercicio 5
             try
             {
-                if (Directory.Exists(path))
+                if (!Directory.Exists(pathRaiz))
                 {
+                    DirectoryInfo di = Directory.CreateDirectory(pathRaiz);
+                    DirectoryInfo di2 = Directory.CreateDirectory(pathPartidas);
                 }
-                DirectoryInfo di = Directory.CreateDirectory(path);
             }
             catch (Exception ex)
             {
@@ -55,7 +57,7 @@ namespace ContaConsola
                         sw.WriteLine("213;Prestamos Bancarios");
                         sw.WriteLine("214;Proveedores");
                         sw.WriteLine("215;IVA por pagar");
-                        sw.WriteLine("216;Acreedores    ");
+                        sw.WriteLine("216;Acreedores");
                         sw.WriteLine("217;Documentos por pagar");
                         sw.WriteLine("3;Patrimonio");
                         sw.WriteLine("31;Utilidades de años anteriores");
@@ -94,6 +96,85 @@ namespace ContaConsola
                 }
             }
 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static void CreacionPartida()
+        {
+            string filePath = @"c:\ProgramaConta\Partidas\Partidas.csv";
+
+            try 
+            {
+                if(!File.Exists(filePath))
+                {
+                    using (StreamWriter sw = File.CreateText(filePath))
+                    {
+                        sw.WriteLine("Fecha;Cuentas;Debe;Haber");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static void ModificacionPartida(string fecha, string valor, string nombreCuenta, string clasfCuenta)
+        {
+            string filePath = @"c:\ProgramaConta\Partidas\Partidas.csv";
+
+            try
+            {
+                var position = 0L; // track the reading position
+                var newLineLength = Environment.NewLine.Length;
+
+                using (var inputStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var reader = new StreamReader(inputStream))
+
+                using (var outputStream = File.Open(filePath, FileMode.Open, FileAccess.Write, FileShare.Read))
+                using (var writer = new StreamWriter(outputStream))
+                {
+
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+
+                        position += line.Length + newLineLength;
+                    }
+
+                    outputStream.Seek(position, SeekOrigin.Begin);
+
+                    if (clasfCuenta == "Activos" || clasfCuenta == "Activos Corrientes" || clasfCuenta == "Activos No corrientes" || clasfCuenta == "Activos Fijos" || clasfCuenta == "Gastos" || clasfCuenta == "Costo de venta")
+                    {
+                        if(Math.Sign(Convert.ToDouble(valor)) >= 0)
+                        {
+                            writer.WriteLine($"{fecha};{nombreCuenta};{valor};");
+                        }
+                        else
+                        {
+                            writer.WriteLine($"{fecha};{nombreCuenta};;{valor}");
+                        }
+                        
+                    }
+
+                    else if (clasfCuenta == "Pasivos" || clasfCuenta == "Pasivos No corrientes" || clasfCuenta == "Patrimonio" || clasfCuenta == "Ingresos")
+                    {
+                        if (Math.Sign(Convert.ToDouble(valor)) >= 0)
+                        {
+                            writer.WriteLine($"{fecha};{nombreCuenta};;{valor}");
+                        }
+                        else
+                        {
+                            writer.WriteLine($"{fecha};{nombreCuenta};{valor};");
+                        }
+                    }
+                }
+
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
@@ -184,14 +265,14 @@ namespace ContaConsola
                                     ids[i] = "0" + ids[i];
                                 }
 
-                                Thread.Sleep(50);
+                                Thread.Sleep(20);
 
                                 diccionario.Add(ids[i + 1], Convert.ToInt32(ids[i]));
                                 
                                 int asdInt;
                                 diccionario.TryGetValue(ids[i + 1], out asdInt);
 
-                                if (print) { Console.WriteLine($"{ids[i + 1]} | {asdInt}"); }
+                                if (print) { Console.WriteLine($"{ids[i + 1]}"); }
 
                                 continue;
                             }
