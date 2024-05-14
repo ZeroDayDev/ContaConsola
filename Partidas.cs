@@ -28,7 +28,7 @@ namespace ContaConsola
 
                     if (answer == "s")
                     {
-
+                        Console.WriteLine("No se ha desarrollado.");
                     }
 
                     else if (answer == "n")
@@ -37,35 +37,42 @@ namespace ContaConsola
                          * Sistema de partidas manual
                                                     */
 
-
                         dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
+                        
+                        bool terminado = false;
 
-                        //INICIO DE PARTIDA
-                        Console.WriteLine("\nNombre de la cuenta a modificar: ");
-                        nombreCuenta = Console.ReadLine();
-
-                        if (!dict.TryGetValue(nombreCuenta, out id))
+                        do
                         {
-                            Console.Clear();
-                            Console.WriteLine($"No existe la cuenta {nombreCuenta}");
-                            return;
-                        }
+                            //INICIO DE PARTIDA
+                            Console.WriteLine("\nNombre de la cuenta a modificar: ");
+                            nombreCuenta = Console.ReadLine();
 
-
-
-                        Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nSi disminuye, ponerlo en negativo:");
-                        valor = Console.ReadLine().ToLower();
-
-                        Console.WriteLine("¿Fecha del movimiento?");
-                        fecha = Console.ReadLine().ToLower();
-
-                        foreach(var cuenta in listaCuentas)
-                        {
-                            if (cuenta.ID == id)
+                            if (!dict.TryGetValue(nombreCuenta, out id))
                             {
-                                cuenta.IngresoPartida(fecha, valor, nombreCuenta);
+                                Console.Clear();
+                                Console.WriteLine($"No existe la cuenta {nombreCuenta}");
+                                return;
+                            }
+
+
+
+                            Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nSi disminuye, ponerlo en negativo:");
+                            valor = Console.ReadLine().ToLower();
+
+                            Console.WriteLine("¿Fecha del movimiento?");
+                            fecha = Console.ReadLine().ToLower();
+
+                            foreach (var cuenta in listaCuentas)
+                            {
+                                if (cuenta.ID == id)
+                                {
+                                    cuenta.IngresoPartida(fecha, valor, nombreCuenta);
+                                }
                             }
                         }
+                        while (!terminado);
+
+                        
 
                     }
 
