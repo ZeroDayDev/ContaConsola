@@ -14,7 +14,7 @@ namespace ContaConsola
         
         public static void Funciones(int Pointer, List<Clases.Cuentas> listaCuentas)
         {
-            string nombreCuenta, valor, fecha, endAnswer;
+            string nombreCuenta, valor, fecha = "{no existente}", endAnswer;
             int id;
 
             Dictionary<string, int> dict = new Dictionary<string, int>();
@@ -63,21 +63,21 @@ namespace ContaConsola
                                 return;
                             }
 
-                            Console.WriteLine("¿De cuanto es el valor que modificara?\nADVERTENCIA: Si es un activo, gasto o costo de venta, dejarlo positivamente si aumenta\nSi disminuye, ponerlo en negativo:");
+                            Console.WriteLine("¿De cuanto es el valor que modificara?");
                             valor = Console.ReadLine().ToLower();
 
                             /*
-                             AUTOMATIZAR EL INGRESO DE VALORES, OSEA SIN EXPLICACIONES
-                             MEJORAR EL SISTEMA DE FECHAS, NO ESTAR INGRESANDO TODO EL TIEMPO
                              HACER VISUALIZACION DE PARTIDAS DINAMICA (Hay que hacerlo leyendo el csv)
                              PRACTICAR YA EL TEMA DE PEDIR VALORES (PARA CALCULAR)
                              EMPEZAR YA CON EL BALANCE DE SALDOS
                              EMPEZAR YA CON LOS EF
                              */
 
-                            Console.WriteLine("¿Fecha del movimiento?");
-                            fecha = Console.ReadLine().ToLower();
-
+                            if(fecha == "{no existente}")
+                            {
+                                Console.WriteLine($"¿Fecha del movimiento? El movimiento anterior fue en la fecha {fecha}");
+                                fecha = Console.ReadLine().ToLower();
+                            }
 
                             foreach (var cuenta in listaCuentas)
                             {
@@ -89,17 +89,18 @@ namespace ContaConsola
                                 }
                             }
 
-                            Console.WriteLine("¿ULTIMO MOVIMIENTO DE ESTA PARTIDA? Y/N | Si/No");
+                            Console.WriteLine("¿INGRESAR OTRO MOVIMIENTO? Y/N | Si/No");
                             endAnswer = Console.ReadLine().ToLower();
 
                             if (endAnswer == "y" || endAnswer == "si" || endAnswer == "afirmativo")
                             {
-                                terminado = true;
+                                Console.Clear();
+                                Console.WriteLine("Reingresando a la misma partida.");
                             }
                             else if(endAnswer == "n" || endAnswer == "no" || endAnswer == "negativo")
                             {
-                                Console.Clear();
-                                Console.WriteLine("Reingresando a la misma partida.");
+                                terminado = true;
+
                             }
                             else
                             {
@@ -158,5 +159,6 @@ namespace ContaConsola
                     break;
             }
         }
+
     }
 }
