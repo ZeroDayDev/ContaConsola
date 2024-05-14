@@ -42,7 +42,7 @@ namespace ContaConsola
                         do
                         {
                             //INICIO DE PARTIDA
-                            dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
+                            dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
 
                             Console.WriteLine("\nNombre de la cuenta a modificar: ");
                             nombreCuenta = Console.ReadLine().Trim();
@@ -119,21 +119,17 @@ namespace ContaConsola
                     break;
 
                 case 4:
-                    //INICIO DE PARTIDA
-                    dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
+                    dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
+                    string filePath = @"c:\ProgramaConta\Partidas\Partidas.csv";
 
                     Console.WriteLine("Nombre de la cuenta a visualizar: ");
                     nombreCuenta = Console.ReadLine();
-
 
                     var query2 = dict.Keys.Where(key => key.Contains(nombreCuenta)).ToList();
 
                     try
                     {
-                        if (!dict.TryGetValue(query2.ElementAt(0), out id))
-                        {
-
-                        }
+                        if (!dict.TryGetValue(query2.ElementAt(0), out id)) { }
                     }
                     catch
                     {
@@ -142,19 +138,71 @@ namespace ContaConsola
                         return;
                     }
 
-                    foreach (var cuenta in listaCuentas)
+                    try
                     {
-                        if (cuenta.ID == id)
+                        var position = 0L; // track the reading position
+                        var newLineLength = Environment.NewLine.Length;
+
+                        using (var inputStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (var reader = new StreamReader(inputStream))
+
+                        using (var outputStream = File.Open(filePath, FileMode.Open, FileAccess.Write, FileShare.Read))
+                        using (var writer = new StreamWriter(outputStream))
                         {
 
-                            Console.WriteLine("FECHAS    |    VALORES");
-
-                            for( int i = 0; i < cuenta.fechas.Count; i++ )
+                            while (!reader.EndOfStream)
                             {
-                                Console.WriteLine(cuenta.fechas[i].ToString() + " | " + cuenta.valores.ToString());
+                                var line = reader.ReadLine();
+                                Console.WriteLine($"{line}");
+
+                                foreach (var cuenta in listaCuentas)
+                                {
+                                    if (cuenta.ID == id)
+                                    {
+                                        Console.WriteLine("FECHAS    |    VALORES");
+
+                                        for (int i = 0; i < cuenta.fechas.Count; i++)
+                                        {
+                                            Console.WriteLine(cuenta.fechas[i].ToString() + " | " + cuenta.valores.ToString());
+                                        }
+                                    }
+                                }
+
+                                position += line.Length + newLineLength;
                             }
-                            
+
+                            //outputStream.Seek(position, SeekOrigin.Begin);
+
+                            /*if (clasfCuenta == "Activos" || clasfCuenta == "Activos Corrientes" || clasfCuenta == "Activos No corrientes" || clasfCuenta == "Activos Fijos" || clasfCuenta == "Gastos" || clasfCuenta == "Costo de venta")
+                            {
+                                if (Math.Sign(Convert.ToDouble(valor)) >= 0)
+                                {
+                                    writer.WriteLine($"{fecha};{nombreCuenta};{valor};");
+                                }
+                                else
+                                {
+                                    writer.WriteLine($"{fecha};{nombreCuenta};;{valor}");
+                                }
+
+                            }
+
+                            else if (clasfCuenta == "Pasivos" || clasfCuenta == "Pasivos No corrientes" || clasfCuenta == "Patrimonio" || clasfCuenta == "Ingresos")
+                            {
+                                if (Math.Sign(Convert.ToDouble(valor)) >= 0)
+                                {
+                                    writer.WriteLine($"{fecha};{nombreCuenta};;{valor}");
+                                }
+                                else
+                                {
+                                    writer.WriteLine($"{fecha};{nombreCuenta};{valor};");
+                                }
+                            }*/
                         }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
                     }
                     break;
             }

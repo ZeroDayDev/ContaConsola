@@ -19,7 +19,7 @@ namespace HelloWorld
             string clasificacionCuenta;
             List<Clases.Cuentas> cuentas = new List<Clases.Cuentas>();
 
-            dict = FileManagerSystem.Lectura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
+            dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
 
 
             //Registro de cuentas tras guardado de datos en diccionario

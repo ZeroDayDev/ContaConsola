@@ -15,7 +15,7 @@ namespace ContaConsola
             //Creacion de nomenclatura ejercicio 5
             try
             {
-                if (!Directory.Exists(pathRaiz))
+                if (!Directory.Exists(pathRaiz) || !Directory.Exists(pathPartidas))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(pathRaiz);
                     DirectoryInfo di2 = Directory.CreateDirectory(pathPartidas);
@@ -181,6 +181,11 @@ namespace ContaConsola
             }
         }
 
+        public static void VisualizarCuentas(string fecha, string valor, string nombreCuenta, string clasfCuenta)
+        {
+            
+        }
+
         public static void VisualizarNomenclatura(string path)
         {
             try
@@ -228,7 +233,7 @@ namespace ContaConsola
             }
         }
 
-        public static Dictionary<string, int> Lectura(string path, bool print)
+        public static Dictionary<string, int> LecturaNomenclatura(string path, bool print)
         {
             Dictionary<string, int> diccionario = new Dictionary<string, int>();
 
