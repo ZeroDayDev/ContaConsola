@@ -104,13 +104,22 @@ namespace ContaConsola
 
         public static void CreacionPartida()
         {
-            string filePath = @"c:\ProgramaConta\Partidas\Partidas.csv";
+            string filePath = @"c:\ProgramaConta\Partidas\Junio.csv";
+            string filePath2 = @"c:\ProgramaConta\Partidas\Julio.csv";
 
             try 
             {
                 if(!File.Exists(filePath))
                 {
                     using (StreamWriter sw = File.CreateText(filePath))
+                    {
+                        sw.WriteLine("Fecha;Cuentas;Debe;Haber");
+                    }
+                }
+                
+                if(!File.Exists(filePath2))
+                {
+                    using (StreamWriter sw = File.CreateText(filePath2))
                     {
                         sw.WriteLine("Fecha;Cuentas;Debe;Haber");
                     }
@@ -123,9 +132,8 @@ namespace ContaConsola
             }
         }
 
-        public static void ModificacionPartida(string fecha, string valor, string nombreCuenta, string clasfCuenta)
+        public static void ModificacionPartida(string fecha, string valor, string nombreCuenta, string clasfCuenta, string filePath)
         {
-            string filePath = @"c:\ProgramaConta\Partidas\Partidas.csv";
 
             try
             {
@@ -156,7 +164,8 @@ namespace ContaConsola
                         }
                         else
                         {
-                            writer.WriteLine($"{fecha};{nombreCuenta};;{valor}");
+                            double valorGuardar = Convert.ToDouble(valor) * -1;
+                            writer.WriteLine($"{fecha};{nombreCuenta};;{valorGuardar}");
                         }
                         
                     }
@@ -169,7 +178,8 @@ namespace ContaConsola
                         }
                         else
                         {
-                            writer.WriteLine($"{fecha};{nombreCuenta};{valor};");
+                            double valorGuardar = Convert.ToDouble(valor) * -1;
+                            writer.WriteLine($"{fecha};{nombreCuenta};{valorGuardar};");
                         }
                     }
                 }
@@ -179,11 +189,6 @@ namespace ContaConsola
             {
                 Console.WriteLine(ex.ToString());
             }
-        }
-
-        public static void VisualizarCuentas(string fecha, string valor, string nombreCuenta, string clasfCuenta)
-        {
-            
         }
 
         public static void VisualizarNomenclatura(string path)

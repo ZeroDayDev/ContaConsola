@@ -1,4 +1,6 @@
-﻿namespace ContaConsola
+﻿using System.Drawing;
+
+namespace ContaConsola
 {
 
 
@@ -51,10 +53,20 @@
                     valores.Add(valorStr);
                 }
 
-                fechas.Add(Convert.ToString(DateTime.Parse(fecha)));
-                
+                string fechaPartida = fecha;
 
-                Console.WriteLine($"Se ha hecho un ingreso en la fecha {Convert.ToString(DateTime.Parse(fecha))}, con un valor positivo de {valor} en la cuenta {nombreCuenta}");
+                if(fecha == "si")
+                {
+                    fechas.Add(fecha);
+                    fechaPartida = fecha;
+                }
+                else
+                {
+                    fechaPartida = Convert.ToString(DateTime.Parse(fecha));
+                    fechas.Add(fechaPartida);
+                }
+
+                Console.WriteLine($"Se ha hecho un ingreso en la fecha {fechaPartida}, con un valor positivo de {valor} en la cuenta {nombreCuenta}");
 
                 return Clasificacion;
             }
@@ -145,6 +157,90 @@
 
                 return clasfFinal;
 
+            }
+
+            static public void IngresoPartidaInicial(List<Cuentas> listaCuentas)
+            {
+                Dictionary<string, int> dict = new Dictionary<string, int>();
+
+                dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
+                string filePath = @"c:\ProgramaConta\Partidas\Junio.csv";
+
+                try
+                {
+                    if (!File.Exists(@"c:\ProgramaConta\Partidas\Junio.csv"))
+                    {
+                        Console.WriteLine("El archivo de lectura es inexistente, prueba con otro.");
+                    }
+
+                    using (StreamReader sr = File.OpenText(@"c:\ProgramaConta\Partidas\Junio.csv"))
+                    {
+                        string s = "";
+                        Console.Clear();
+
+                        while ((s = sr.ReadLine()) != null)
+                        {
+
+                            string[] ids = s.Split(";");
+                            string myKey = "";
+
+                            foreach (Cuentas cuenta in listaCuentas)
+                            {
+                                myKey = dict.FirstOrDefault(x => x.Value == cuenta.ID).Key;
+
+                                if (ids[1] == myKey)
+                                {
+
+                                    if (cuenta.Clasificacion == "Activos" || cuenta.Clasificacion == "Activos Corrientes" || cuenta.Clasificacion == "Activos No corrientes" || cuenta.Clasificacion == "Activos Fijos" || cuenta.Clasificacion == "Gastos" || cuenta.Clasificacion == "Costo de venta")
+                                    {
+                                        if (!string.IsNullOrEmpty(ids[2]))
+                                        {
+                                            cuenta.valores.Add(ids[2]);
+                                        }
+
+                                        if (!string.IsNullOrEmpty(ids[3]))
+                                        {
+                                            double valorNum = Convert.ToDouble(ids[3]);
+                                            valorNum = valorNum * -1;
+                                            string valorStr = Convert.ToString(valorNum);
+
+                                            Console.WriteLine(valorStr);
+                                            cuenta.valores.Add(valorStr);
+                                        }
+                                    }
+
+                                    else if (cuenta.Clasificacion == "Pasivos" || cuenta.Clasificacion == "Pasivos No corrientes" || cuenta.Clasificacion == "Patrimonio" || cuenta.Clasificacion == "Ingresos")
+                                    {
+
+
+                                        if (!string.IsNullOrEmpty(ids[2]))
+                                        {
+                                            double valorNum = Convert.ToDouble(ids[2]);
+                                            valorNum = valorNum * -1;
+                                            string valorStr = Convert.ToString(valorNum);
+
+                                            Console.WriteLine(valorStr);
+                                            cuenta.valores.Add(valorStr);
+                                        }
+
+                                        if (!string.IsNullOrEmpty(ids[3]))
+                                        {
+                                            cuenta.valores.Add(ids[3]);
+                                        }
+
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
 
         }

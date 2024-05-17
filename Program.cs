@@ -45,7 +45,8 @@ namespace HelloWorld
         {
             List<Clases.Cuentas> cuentas = new List<Clases.Cuentas>();
             cuentas = Basics.ExecOrigins();
-            
+            Clases.Cuentas.IngresoPartidaInicial(cuentas);
+
 
             //Variables para apuntar y mantener ciclos
             int Pointer;
@@ -59,7 +60,7 @@ namespace HelloWorld
                 Console.WriteLine("Bienvenido usuario, a que procedera?");
                 Console.WriteLine("1. Partidas");
                 Console.WriteLine("2. Nomenclatura cuentas");
-                Console.WriteLine("3. Balance general y Estado de resultados");
+                Console.WriteLine("3. Balance general, Estado de resultados y Balance de saldos");
                 Console.WriteLine("4. Creditos y licencia");
                 Console.WriteLine("5. Salir");
 
@@ -71,22 +72,18 @@ namespace HelloWorld
                     case 1:
                         whiling = false;
                         Console.Clear();
-                        Console.WriteLine("1. Ingresar partida");
-                        Console.WriteLine("2. Retiro partida");
-                        Console.WriteLine("3. Modificar partida");
-                        Console.WriteLine("4. Visualizar partidas");
-                        Console.WriteLine("5. Salir"); 
+                        Console.WriteLine("1. Ingresar partida (Jornalizacion)");
+                        Console.WriteLine("2. Ver jornalizacion");
+                        Console.WriteLine("3. Visualizar partidas (DMG)");
+                        Console.WriteLine("4. Salir"); 
                         break;
 
                     case 2:
                         whiling = false;
                         Console.Clear();
-                        Console.WriteLine("1. Visualizar nomenclatura");
-                        Console.WriteLine("2. Modificar nomenclatura");
-                        Console.WriteLine("3. Crear fichero");
-                        Console.WriteLine("4. Modificar fichero");
-                        Console.WriteLine("5. Remover fichero");
-                        Console.WriteLine("6. Salir");
+                        Console.WriteLine("1. Visualizar nomenclatura (YA)");
+                        Console.WriteLine("2. Crear fichero");
+                        Console.WriteLine("3. Salir");
                         
                         break;
 
@@ -94,15 +91,16 @@ namespace HelloWorld
                         whiling = false;
                         Console.Clear();
                         Console.WriteLine("1. Visualizar Balance general y Estado de resultados");
-                        Console.WriteLine("2. Crear BG y ER con valores");
-                        Console.WriteLine("3. Crear archivo de BG y ER");
-                        Console.WriteLine("4. Salir");
+                        Console.WriteLine("2. Crear fichero BG y ER con los valores");
+                        Console.WriteLine("3. Visualizar balance de saldos (A medias)");
+                        Console.WriteLine("4. Crear fichero balance de saldos con los valores");
+                        Console.WriteLine("5. Salir");
                         break;
 
                     case 4:
                         whiling = false;
                         Console.Clear();
-                        Console.WriteLine("Gracias por revisar esto, pero no tengo ni idea de licencias.");
+                        Console.WriteLine("Gracias por revisar esto, pero no tengo ni idea de licencias. Asi que todos los derechos reservados.");
                         Console.WriteLine("Creado por Kleyver De Leon, con el equipo que conformaba a los siguientes integrantes:");
                         Console.WriteLine("Ivan Giron, David Enrique y Kevin Miguel.");
                         break;
@@ -130,7 +128,10 @@ namespace HelloWorld
                         Console.Clear();
                         break;
                     case 3:
-                        Console.WriteLine("A programar!");
+                        OpcionElegida();
+                        Console.Clear();
+                        EF.Funciones(Pointer, cuentas);
+                        Console.Clear();
                         break;
                     default:
                         Console.WriteLine("Error p");
