@@ -115,18 +115,64 @@ namespace ContaConsola
 
                 case 3:
                     dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
-                    string filePath = @"c:\ProgramaConta\Partidas\Junio.csv";
 
-                    double caja = 0, bancos = 0,
+                    //Activos
+                    double caja = 0, bancos = 0, inventarios = 0, clientes = 0, documentosCobrar = 0, segurosCobrar = 0, ivaCobrar = 0, inversiones = 0;
+                    //Activos fijos
+                    double terrenos = 0, maquinaria = 0, vehiculos = 0, mobYequipo = 0, equipoComputo = 0;
+                    //Pasivos
+                    double cuotaPatronalPagar = 0, cuotaLaboralPagar = 0, prestamosBancarios = 0, proveedores = 0, ivaPagar = 0, acreedores = 0, docPagar = 0;
+                    //Patrimonio
+                    double utilidadesAnteriores = 0, patrimonio = 0, reservaLegal = 0;
+                    //Ingresos
+                    double ventas;
+                    //Gastos
+                    double bonificacionIncentiva = 0, horasExtras = 0, sueldos = 0, segurosGasto = 0, cuotaPatronal = 0, aguinaldo = 0, bono14 = 0, papeleriaYUtiles = 0, serviciosTelefonicos = 0;
+                    double salarioVentas = 0, salarioAdministracion = 0, horasExtrasVentas = 0, horasExtrasAdmin = 0, bonIncentivoVentas = 0;
+                    //Costo de venta
+                    double costoDeVenta = 0;
+
+                    double total = 0;
+
+                    Console.WriteLine("MES A VISUALIZAR: ");
+                    Console.WriteLine("1. JUNIO");
+                    Console.WriteLine("2. JULIO");
+                    Console.WriteLine("3. AMBOS");
+                    string archivoAElegir4 = Console.ReadLine().ToLower();
+                    string archivo3 = @"c:\ProgramaConta\Partidas\Junio.csv";
+
+                    if (archivoAElegir4.Contains("jun") || archivoAElegir4.Contains("1"))
+                    {
+                        nombreArchivo = "junio";
+                        archivo3 = @"c:\ProgramaConta\Partidas\Junio.csv";
+                    }
+
+                    if (archivoAElegir4.Contains("jul") || archivoAElegir4.Contains("2"))
+                    {
+                        nombreArchivo = "julio";
+                        archivo3 = @"c:\ProgramaConta\Partidas\Julio.csv";
+                    }
+                    if (archivoAElegir4.Contains("am") || archivoAElegir4.Contains("3"))
+                    {
+                        nombreArchivo = "junio";
+                        archivo3 = @"c:\ProgramaConta\Partidas\Junio.csv";
+
+                        nombreArchivo = "julio";
+                        archivo3 = @"c:\ProgramaConta\Partidas\Julio.csv";
+                    }
+                    else
+                    {
+                        Console.WriteLine("No escojiste ninguna opcion.");
+                    }
 
                     try
                     {
-                        if (!File.Exists(@"c:\ProgramaConta\Partidas\Junio.csv"))
+                        if (!File.Exists(archivo3))
                         {
                             Console.WriteLine("El archivo de lectura es inexistente, prueba con otro.");
                         }
 
-                        using (StreamReader sr = File.OpenText(@"c:\ProgramaConta\Partidas\Junio.csv"))
+                        using (StreamReader sr = File.OpenText(archivo3))
                         {
                             string s = "";
                             Console.Clear();
@@ -136,31 +182,51 @@ namespace ContaConsola
 
                                 string[] ids = s.Split(";");
 
+                                caja = calcCuentas("Caja", ids);
+                                bancos = calcCuentas("Bancos", ids);
+                                inventarios = calcCuentas("Inventarios", ids);
+                                clientes = calcCuentas("Clientes", ids);
+                                documentosCobrar = calcCuentas("Documentos por cobrar", ids);
+                                segurosCobrar = calcCuentas("Seguros por cobrar", ids);
+                                ivaCobrar = calcCuentas("IVA por cobrar", ids);
+                                inversiones = calcCuentas("Inversiones", ids);
+                                terrenos = calcCuentas("Terrenos", ids);
+                                maquinaria = calcCuentas("Maquinaria", ids);
+                                vehiculos = calcCuentas("Vehiculos", ids);
+                                mobYequipo = calcCuentas("Mobiliario y equipo", ids);
+                                equipoComputo = calcCuentas("Equipo de computo", ids);
+                                cuotaPatronalPagar = calcCuentas("Cuota patronal por pagar", ids);
+                                cuotaLaboralPagar = calcCuentas("Cuota laboral por pagar", ids);
+                                prestamosBancarios = calcCuentas("Prestamos Bancarios", ids);
+                                proveedores = calcCuentas("Proveedores", ids);
+                                ivaPagar = calcCuentas("IVA por pagar", ids);
+                                acreedores = calcCuentas("Acreedores", ids);
+                                docPagar = calcCuentas("Documentos por pagar", ids);
+                                utilidadesAnteriores = calcCuentas("Utilidades de años anteriores", ids);
+                                patrimonio = calcCuentas("patrimonio", ids);
+                                reservaLegal = calcCuentas("Reserva legal", ids);
+                                ventas = calcCuentas("Ventas", ids);
+                                bonificacionIncentiva = calcCuentas("Bonificacion incentiva", ids);
+                                horasExtras = calcCuentas("Horas extras", ids);
+                                sueldos = calcCuentas("Sueldos", ids);
+                                segurosGasto = calcCuentas("Seguros (Gastos)", ids);
+                                cuotaPatronal = calcCuentas("Cuota patronal", ids);
+                                aguinaldo = calcCuentas("Aguinaldo", ids);
+                                bono14 = calcCuentas("Bono 14", ids);
+                                papeleriaYUtiles = calcCuentas("Papeleria y utiles", ids);
+                                serviciosTelefonicos = calcCuentas("Servicios telefonicos", ids);
+                                salarioVentas = calcCuentas("Salario de Ventas", ids);
+                                salarioAdministracion = calcCuentas("Salario Administracion", ids);
+                                horasExtrasVentas = calcCuentas("Horas extras Ventas", ids);
+                                horasExtrasAdmin = calcCuentas("Horas extras Administracion", ids);
+                                bonIncentivoVentas = calcCuentas("Bonificacion incentivo Ventas", ids);
+                                costoDeVenta = calcCuentas("costo de venta", ids);  
 
-                                if (ids[1] == "Caja" && !string.IsNullOrEmpty(ids[2]))
-                                {
-                                    caja += Convert.ToDouble(ids[2]);
-                                }
-                                if (ids[1] == "Caja" && !string.IsNullOrEmpty(ids[3]))
-                                {
-                                    caja -= Convert.ToDouble(ids[3]);
-                                }
-
-                                if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[2]))
-                                {
-                                    bancos += Convert.ToDouble(ids[2]);
-                                }
-                                if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[3]))
-                                {
-                                    bancos -= Convert.ToDouble(ids[3]);
-                                }
-
+                                total += caja + bancos + inventarios + clientes + documentosCobrar + segurosCobrar + ivaCobrar + inversiones + terrenos + maquinaria + vehiculos + mobYequipo + equipoComputo + cuotaPatronalPagar + cuotaLaboralPagar + prestamosBancarios + proveedores + ivaPagar + acreedores + docPagar + utilidadesAnteriores + patrimonio + reservaLegal + ventas + bonificacionIncentiva + horasExtras+ sueldos + segurosGasto + cuotaPatronal+ aguinaldo + bono14 + papeleriaYUtiles + serviciosTelefonicos + salarioVentas + salarioAdministracion + horasExtrasVentas + horasExtrasAdmin + bonIncentivoVentas + costoDeVenta;
                             }
                         }
 
-                        Console.WriteLine("\nEl total del debe es de Q");
-                        Console.WriteLine("El total del haber es de Q");
-                        Console.WriteLine("El total de es de Q" + "\n");
+                        Console.WriteLine("El total de es de Q" + total + "\n");
 
                         Console.WriteLine("\nPulsa cualquier tecla para salir");
                         Console.ReadLine();
@@ -173,6 +239,26 @@ namespace ContaConsola
                     }
                     break;
             }
+        }
+
+        static double calcCuentas(string cuenta, string[] select)
+        {
+            double final = 0, temp = 0;
+
+            if (select[1] == cuenta && !string.IsNullOrEmpty(select[2]))
+            {
+                temp += Convert.ToDouble(select[2]);
+                Console.WriteLine($"{cuenta}        |       {temp}");
+            }
+            if (select[1] == cuenta && !string.IsNullOrEmpty(select[3]))
+            {
+                temp -= Convert.ToDouble(select[3]);
+                Console.WriteLine($"{cuenta}        |       {temp}");
+            }
+
+            final = final + temp;
+
+            return final;
         }
       
         static void crearER(Dictionary<string, int> dict, string archivo, string nombreArchivo)

@@ -204,7 +204,6 @@ namespace ContaConsola
                                             valorNum = valorNum * -1;
                                             string valorStr = Convert.ToString(valorNum);
 
-                                            Console.WriteLine(valorStr);
                                             cuenta.valores.Add(valorStr);
                                         }
                                     }
@@ -219,7 +218,6 @@ namespace ContaConsola
                                             valorNum = valorNum * -1;
                                             string valorStr = Convert.ToString(valorNum);
 
-                                            Console.WriteLine(valorStr);
                                             cuenta.valores.Add(valorStr);
                                         }
 
