@@ -12,7 +12,7 @@ namespace HelloWorld
 
         public static List<Clases.Cuentas> ExecOrigins()
         {
-            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta", @"c:\ProgramaConta\Partidas");
+            FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta", @"c:\ProgramaConta\Partidas", @"c:\ProgramaConta\EFS");
             FileManagerSystem.CreacionPartida();
             Dictionary<string, int> dict = new Dictionary<string, int>();
 
@@ -81,7 +81,7 @@ namespace HelloWorld
                     case 2:
                         whiling = false;
                         Console.Clear();
-                        Console.WriteLine("1. Visualizar nomenclatura (YA)");
+                        Console.WriteLine("1. Visualizar nomenclatura ");
                         Console.WriteLine("2. Crear fichero");
                         Console.WriteLine("3. Salir");
                         
@@ -90,11 +90,10 @@ namespace HelloWorld
                     case 3:
                         whiling = false;
                         Console.Clear();
-                        Console.WriteLine("1. Visualizar Balance general y Estado de resultados");
-                        Console.WriteLine("2. Crear fichero BG y ER con los valores");
+                        Console.WriteLine("1. Crear y ver BG");
+                        Console.WriteLine("2. Crear y ver ER");
                         Console.WriteLine("3. Visualizar balance de saldos (A medias)");
-                        Console.WriteLine("4. Crear fichero balance de saldos con los valores");
-                        Console.WriteLine("5. Salir");
+                        Console.WriteLine("4. Salir");
                         break;
 
                     case 4:

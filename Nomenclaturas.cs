@@ -20,6 +20,14 @@ namespace HelloWorld
                     Console.ReadLine();
                     Console.Clear();
                     break;
+                case 2:
+                    FileManagerSystem.EscrituraInicial(@"c:\ProgramaConta", @"c:\ProgramaConta\Partidas", @"c:\ProgramaConta\EFS");
+                    Console.WriteLine("Escritura finalizada.");
+
+                    Console.WriteLine("\nPulsa cualquier tecla para salir");
+                    Console.ReadLine();
+                    Console.Clear();
+                    break;
             }
         }
     }

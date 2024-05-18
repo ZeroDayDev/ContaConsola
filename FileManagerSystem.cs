@@ -10,15 +10,16 @@ namespace ContaConsola
 {
     public class FileManagerSystem
     {
-        public static void EscrituraInicial(string pathRaiz, string pathPartidas)
+        public static void EscrituraInicial(string pathRaiz, string pathPartidas, string pathEF)
         {
             //Creacion de nomenclatura ejercicio 5
             try
             {
-                if (!Directory.Exists(pathRaiz) || !Directory.Exists(pathPartidas))
+                if (!Directory.Exists(pathRaiz) || !Directory.Exists(pathPartidas) || !Directory.Exists(pathEF))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(pathRaiz);
                     DirectoryInfo di2 = Directory.CreateDirectory(pathPartidas);
+                    DirectoryInfo di3 = Directory.CreateDirectory(pathEF);
                 }
             }
             catch (Exception ex)
