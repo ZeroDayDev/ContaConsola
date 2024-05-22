@@ -182,6 +182,8 @@ namespace ContaConsola
 
                                 string[] ids = s.Split(";");
 
+                                Console.WriteLine(s);
+
                                 caja = calcCuentas("Caja", ids);
                                 bancos = calcCuentas("Bancos", ids);
                                 inventarios = calcCuentas("Inventarios", ids);
@@ -226,7 +228,7 @@ namespace ContaConsola
                             }
                         }
 
-                        Console.WriteLine("El total de es de Q" + total + "\n");
+                        Console.WriteLine("La sumatoria es de Q" + total + "\n");
 
                         Console.WriteLine("\nPulsa cualquier tecla para salir");
                         Console.ReadLine();
@@ -243,20 +245,19 @@ namespace ContaConsola
 
         static double calcCuentas(string cuenta, string[] select)
         {
-            double final = 0, temp = 0;
+            double final = 0, debe = 0, haber = 0;
 
             if (select[1] == cuenta && !string.IsNullOrEmpty(select[2]))
             {
-                temp += Convert.ToDouble(select[2]);
-                Console.WriteLine($"{cuenta}        |       {temp}");
+                debe = debe + Convert.ToDouble(select[2]);
             }
             if (select[1] == cuenta && !string.IsNullOrEmpty(select[3]))
             {
-                temp -= Convert.ToDouble(select[3]);
-                Console.WriteLine($"{cuenta}        |       {temp}");
+                haber = haber + Convert.ToDouble(select[3]);
+              
             }
 
-            final = final + temp;
+            final = debe - haber;
 
             return final;
         }
@@ -326,7 +327,9 @@ namespace ContaConsola
                     }
                 }
 
-
+                Console.WriteLine($"EMPRESA XY");
+                Console.WriteLine($"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}");
+                Console.WriteLine($"CIFRAS (Q)");
                 Console.WriteLine($"Ventas: {ventas}");
                 Console.WriteLine($"Devoluciones ventas: {devolucionesVentas}");
                 Console.WriteLine($"Ventas netas: {ventasNetas}");
@@ -334,8 +337,13 @@ namespace ContaConsola
                 Console.WriteLine($"Utilidades en ventas: {utilidadVenta}");
                 Console.WriteLine($"Gastos de operacion: {gastosOperacion}");
                 Console.WriteLine($"Utilidad en operacion: {utilidadOperacion}");
-                Console.WriteLine($"Utilidad sobre otros gastos e ingresos: {OtrosGastosIngre}");
+                Console.WriteLine($"Utilidad sobre otros gastos e ingresos: {OtrosGastosIngre}");   
                 Console.WriteLine($"ISR: {ISR}");
+
+                if (total > 0)
+                    Console.WriteLine($"Ganancia del ejercicio Q{total}");
+                else
+                    Console.WriteLine($"Perdida del ejercicio Q{total}");
 
                 if (total > 0)
                 {
@@ -627,7 +635,7 @@ namespace ContaConsola
                                 reservaLegal -= Convert.ToDouble(ids[3]);
                             }
 
-                            totalCapital = capital + utilidades + reservaLegal + utilidadEjercicio;
+                            totalCapital = capital + utilidades + reservaLegal + utilidadEjercicio * -1;
 
                             totalFinal = totalPasivo + totalCapital;
 

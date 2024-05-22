@@ -15,8 +15,9 @@ namespace ContaConsola
         
         public static void Funciones(int Pointer, List<Clases.Cuentas> listaCuentas)
         {
-            string nombreCuenta, valor, fecha = "{no existente}", endAnswer, archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
-            int id;
+            string nombreCuenta, valor = "", fecha = "{no existente}", endAnswer, archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
+            int id = 0;
+            List<string> query = new List<string>();
 
             Dictionary<string, int> dict = new Dictionary<string, int>();
 
@@ -25,113 +26,123 @@ namespace ContaConsola
             switch (Pointer)
             {
                 case 1:
-                    Console.WriteLine("¿Usaras el sistema automatico? S/N");
-                    answer = Console.ReadLine().ToLower();
+                    bool terminado = false;
 
-                    if (answer == "s")
+                    Console.WriteLine("MES A JORNALIZAR: ");
+                    Console.WriteLine("1. JUNIO");
+                    Console.WriteLine("2. JULIO");
+                    string archivoAElegir = Console.ReadLine();
+
+                    if(archivoAElegir.Contains("jun") || archivoAElegir.Contains("1"))
                     {
-                        Console.WriteLine("No se ha desarrollado por falta de tiempo.");
+                        archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
+                    }        
+                        
+                    if(archivoAElegir.Contains("jul") || archivoAElegir.Contains("2"))
+                    {
+                        archivo = @"c:\ProgramaConta\Partidas\Julio.csv";
                     }
 
-                    else if (answer == "n")
+                    do
                     {
-                        /*
-                         * Sistema de partidas manual
-                                                    */
-                        bool terminado = false;
+                        //INICIO DE PARTIDA
+                        dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
 
-                        Console.WriteLine("MES A JORNALIZAR: ");
-                        Console.WriteLine("1. JUNIO");
-                        Console.WriteLine("2. JULIO");
-                        string archivoAElegir = Console.ReadLine();
-
-                        if(archivoAElegir.Contains("jun") || archivoAElegir.Contains("1"))
+                        bool cuentaIngresada = false;
+                        while (!cuentaIngresada)
                         {
-                            archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
-                        }        
-                        
-                        if(archivoAElegir.Contains("jul") || archivoAElegir.Contains("2"))
-                        {
-                            archivo = @"c:\ProgramaConta\Partidas\Julio.csv";
-                        }
-
-                        do
-                        {
-                            //INICIO DE PARTIDA
-                            dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", true);
-
                             Console.WriteLine("\nNombre de la cuenta a modificar: ");
                             nombreCuenta = Console.ReadLine().Trim();
 
-                            var query = dict.Keys.Where(key => key.Contains(nombreCuenta)).ToList();
+                            query = dict.Keys.Where(key => key.Contains(nombreCuenta)).ToList();
 
                             try
                             {
-                                if (!dict.TryGetValue(query.ElementAt(0), out id))
-                                {
-
-                                }
+                                if (!dict.TryGetValue(query.ElementAt(0), out id)) { }
+                                cuentaIngresada = true;
                             }
                             catch
                             {
                                 Console.Clear();
                                 Console.WriteLine($"No existe la cuenta {nombreCuenta}");
-                                return;
-                            }
-
-                            Console.WriteLine("¿De cuanto es el valor que modificara?");
-                            valor = Console.ReadLine().ToLower();
-
-                            /*
-                             HACER VISUALIZACION DE PARTIDAS DINAMICA (Hay que hacerlo leyendo el csv)
-                             PRACTICAR YA EL TEMA DE PEDIR VALORES (PARA CALCULAR)
-                             EMPEZAR YA CON EL BALANCE DE SALDOS
-                             EMPEZAR YA CON LOS EF
-                             */
-
-                            if(fecha == "{no existente}")
-                            {
-                                Console.WriteLine($"¿Fecha del movimiento? El movimiento anterior fue en la fecha {fecha}");
-                                fecha = Console.ReadLine().ToLower().Trim();
-                            }
-
-                            foreach (var cuenta in listaCuentas)
-                            {
-                                if (cuenta.ID == id)
-                                {
-                                    string clasfCuenta;
-                                    clasfCuenta = cuenta.IngresoPartida(fecha, valor, query.ElementAt(0));
-                                    FileManagerSystem.ModificacionPartida(fecha, valor, query.ElementAt(0), clasfCuenta, archivo);
-                                }
-                            }
-
-                            Console.WriteLine("¿INGRESAR OTRO MOVIMIENTO? Y/N | Si/No");
-                            endAnswer = Console.ReadLine().ToLower();
-
-                            if (endAnswer == "y" || endAnswer == "si" || endAnswer == "afirmativo")
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Reingresando a la misma partida.");
-                            }
-                            else if(endAnswer == "n" || endAnswer == "no" || endAnswer == "negativo")
-                            {
-                                terminado = true;
-
-                            }
-                            else
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Reingresando a la misma partida.");
                             }
                         }
-                        while (!terminado);
 
-                        
+                        bool valorIngresado = false;
 
+                        while (!valorIngresado)
+                        {
+                            Console.WriteLine("¿De cuanto es el valor que modificara?");
+                            try
+                            {
+                                double valorIntroducido = Convert.ToDouble(Console.ReadLine());
+                                valor = Convert.ToString(valorIntroducido);
+                                valorIngresado = true;
+                            }
+                            catch
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"NO SE HA INGRESADO UN VALOR VALIDO.\n");
+                            }
+                        }
+
+                        if(fecha == "{no existente}")
+                        {
+                            bool fechaIngresada = false;
+
+                            while(!fechaIngresada)
+                            {
+                                try
+                                {
+                                    Console.WriteLine($"¿Fecha del movimiento?");
+                                    fecha = Console.ReadLine().ToLower().Trim();
+
+                                    if(fecha != "si")
+                                    {
+                                        fecha = Convert.ToString(DateTime.Parse(fecha));
+                                    }
+
+                                    fechaIngresada = true;
+                                }
+                                catch
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine($"NO SE HA INGRESADO UNA FECHA VALIDA.\n");
+                                }
+                            }
+                        }
+
+                        foreach (var cuenta in listaCuentas)
+                        {
+                            if (cuenta.ID == id)
+                            {
+                                string clasfCuenta;
+                                clasfCuenta = cuenta.IngresoPartida(fecha, valor, query.ElementAt(0));
+                                FileManagerSystem.ModificacionPartida(fecha, valor, query.ElementAt(0), clasfCuenta, archivo);
+                            }
+                        }
+
+                        Console.WriteLine("¿INGRESAR OTRO MOVIMIENTO? Y/N | Si/No");
+                        endAnswer = Console.ReadLine().ToLower();
+
+                        if (endAnswer == "y" || endAnswer == "si" || endAnswer == "afirmativo")
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Reingresando a la misma partida.");
+                        }
+                        else if(endAnswer == "n" || endAnswer == "no" || endAnswer == "negativo")
+                        {
+                            terminado = true;
+
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Reingresando a la misma partida.");
+                        }
                     }
+                    while (!terminado);
 
-                    else { Console.Clear(); Console.WriteLine("No respondiste nada, volviendo al menu principal"); }
-                    
                     break;
 
                 case 2:
@@ -256,13 +267,6 @@ namespace ContaConsola
                             {
 
                                 string[] ids = s.Split(";");
-
-                                //Console.WriteLine(query2.ElementAt(0));
-                                //Console.WriteLine(ids[0]);
-                                //Console.WriteLine(ids[1]);
-                                //Console.WriteLine(ids[2]);
-                                //Console.WriteLine(ids[3]);
-                                //Console.WriteLine(ids.Length);
 
                                 if (ids[1] == query2.ElementAt(0))
                                 {

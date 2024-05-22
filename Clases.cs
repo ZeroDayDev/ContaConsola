@@ -62,7 +62,7 @@ namespace ContaConsola
                 }
                 else
                 {
-                    fechaPartida = Convert.ToString(DateTime.Parse(fecha));
+                    fechaPartida = fecha;
                     fechas.Add(fechaPartida);
                 }
 
