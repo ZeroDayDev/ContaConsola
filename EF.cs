@@ -32,7 +32,7 @@ namespace ContaConsola
                         nombreArchivo = "junio";
                         archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
                         archivo2 = @"c:\ProgramaConta\EFS\ER_" + nombreArchivo + ".csv";
-                        crearBG(dict, archivo, nombreArchivo, -13825.0, archivo2);
+                        crearBG(dict, archivo, nombreArchivo, archivo2);
                     }
 
                     if (archivoAElegir3.Contains("jul") || archivoAElegir3.Contains("2"))
@@ -40,19 +40,19 @@ namespace ContaConsola
                         nombreArchivo = "julio";
                         archivo = @"c:\ProgramaConta\Partidas\Julio.csv";
                         archivo2 = @"c:\ProgramaConta\EFS\ER_" + nombreArchivo + ".csv";
-                        crearBG(dict, archivo, nombreArchivo, -13825.0, archivo2);
+                        crearBG(dict, archivo, nombreArchivo, archivo2);
                     }
                     if (archivoAElegir3.Contains("am") || archivoAElegir3.Contains("3"))
                     {
                         nombreArchivo = "junio";
                         archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
                         archivo2 = @"c:\ProgramaConta\EFS\ER_" + nombreArchivo + ".csv";
-                        crearBG(dict, archivo, nombreArchivo, -13825.0, archivo2);
+                        crearBG(dict, archivo, nombreArchivo, archivo2);
 
                         nombreArchivo = "julio";
                         archivo = @"c:\ProgramaConta\Partidas\Julio.csv";
                         archivo2 = @"c:\ProgramaConta\EFS\ER_" + nombreArchivo + ".csv";
-                        crearBG(dict, archivo, nombreArchivo, -13825.0, archivo2);
+                        crearBG(dict, archivo, nombreArchivo, archivo2);
                     }
                     else
                     {
@@ -421,14 +421,14 @@ namespace ContaConsola
                 Console.WriteLine(ex.ToString());
             }
         }
-        static void crearBG(Dictionary<string, int> dict, string archivo, string nombreArchivo, double PRESTPAGAR, string archivo2)
+        static void crearBG(Dictionary<string, int> dict, string archivo, string nombreArchivo, string archivo2)
         {
             dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
             double activoCorriente = 0, dispYEquivEfectivo = 0, docCobrar = 0, clientes = 0, cuentasIncobrables= 0, totalClientes = 0, inventarios = 0, segurosPorCobrar = 0, Inversiones = 0, impuestos = 0;
             double activoNoCorriente = 0, docCobrar2 = 0, inversiones = 0, propiedadP = 0, depreciacion = 0, totalpropiedadP = 0;
             double totalActivo = 0;
 
-            double pasivoCorriente = 0, docPagar = 0, prestBancarios = 0, acreedores = 0, proveedores = 0, debitoFiscal = 0;
+            double pasivoCorriente = 0, docPagar = 0, prestBancarios = 0, acreedores = 0, proveedores = 0, debitoFiscal = 0, prestaciones = 0;
             double pasivoNoCorriente = 0, prestBancarios2 = 0, docPagar2 = 0, hipotecas = 0;
             double totalPasivo = 0;
 
@@ -604,8 +604,19 @@ namespace ContaConsola
                             {
                                 debitoFiscal -= Convert.ToDouble(ids[3]);
                             }
+                            
+                            if (ids[1] == "Cuota laboral por pagar" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Cuota patronal por pagar" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                prestaciones += Convert.ToDouble(ids[2]);
+                                Console.WriteLine(prestaciones);
+                            }
+                            if (ids[1] == "Cuota laboral por pagar" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Cuota patronal por pagar" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                prestaciones -= Convert.ToDouble(ids[3]);
+                                Console.WriteLine(prestaciones);
+                            }
 
-                            pasivoCorriente = docPagar + prestBancarios + acreedores + proveedores + PRESTPAGAR + debitoFiscal;
+                            pasivoCorriente = docPagar + prestBancarios + acreedores + proveedores + prestaciones + debitoFiscal;
                             totalPasivo = pasivoCorriente + pasivoNoCorriente;
 
                             if (ids[1] == "Patrimonio" && !string.IsNullOrEmpty(ids[2]))
@@ -659,7 +670,7 @@ namespace ContaConsola
                 Console.WriteLine($"Inversiones: Q0");
                 Console.WriteLine($"Propiedad, planta y equipo: Q{propiedadP}");
                 Console.WriteLine($"Depreciacion acumulada: Q{depreciacion}");
-                Console.WriteLine($"Total de propiedad, planta y equipo: Q{totalpropiedadP}");
+                Console.WriteLine($"Total de propiedad, planta y equipo: Q{propiedadP}");
                 Console.WriteLine($"\nTotal activo no corriente: Q{activoNoCorriente}\n");
 
                 Console.WriteLine($"\nTotal activo: Q{totalActivo}\n\n");                
@@ -668,7 +679,7 @@ namespace ContaConsola
                 Console.WriteLine($"Prestamos bancarios: Q{prestBancarios}");
                 Console.WriteLine($"Acreedores: Q{acreedores}");
                 Console.WriteLine($"Proveedores: Q{proveedores}");
-                Console.WriteLine($"Prestaciones por pagar: Q{PRESTPAGAR}");
+                Console.WriteLine($"Prestaciones por pagar: Q{prestaciones}");
                 Console.WriteLine($"Debito fiscal: Q{debitoFiscal}");
                 Console.WriteLine($"\nTotal pasivo corriente: Q{pasivoCorriente}\n");
                 
@@ -720,7 +731,7 @@ namespace ContaConsola
                             sw.WriteLine($"Prestamos bancarios: ;Q{prestBancarios * -1}");
                             sw.WriteLine($"Acreedores: ;Q{acreedores * -1}");
                             sw.WriteLine($"Proveedores: ;Q{proveedores * -1}");
-                            sw.WriteLine($"Prestaciones por pagar: ;Q{PRESTPAGAR * -1}");
+                            sw.WriteLine($"Prestaciones por pagar: ;Q{prestaciones * -1}");
                             sw.WriteLine($"Debito fiscal: ;Q{debitoFiscal * -1}");
                             sw.WriteLine($"\nTotal pasivo corriente: ;Q{pasivoCorriente * -1}\n");
                             
