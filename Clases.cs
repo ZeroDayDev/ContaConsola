@@ -47,7 +47,7 @@ namespace ContaConsola
                     valores.Add(valorStr);
                 }
 
-                string fechaPartida = fecha;
+                string fechaPartida = Convert.ToString(DateTime.Parse(fecha));
 
                 if(fecha == "si")
                 {

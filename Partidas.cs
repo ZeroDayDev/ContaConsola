@@ -36,9 +36,14 @@ namespace ContaConsola
                         archivo = @"c:\ProgramaConta\Partidas\Junio.csv";
                     }        
                         
-                    if(archivoAElegir.Contains("jul") || archivoAElegir.Contains("2"))
+                    else if(archivoAElegir.Contains("jul") || archivoAElegir.Contains("2"))
                     {
                         archivo = @"c:\ProgramaConta\Partidas\Julio.csv";
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se ha elegido ninguno, saliendo.");
+                        return;
                     }
 
                     do
@@ -84,7 +89,7 @@ namespace ContaConsola
                             }
                         }
 
-                        if(fecha == "{no existente}")
+                        if (fecha == "{no existente}")
                         {
                             bool fechaIngresada = false;
 
@@ -97,7 +102,9 @@ namespace ContaConsola
 
                                     if(fecha != "si")
                                     {
-                                        fecha = Convert.ToString(DateTime.Parse(fecha));
+                                        var diayFecha = DateTime.Parse(fecha);
+                                        var date = diayFecha.ToString("dd/MM/yyyy");
+                                        fecha = date;
                                     }
 
                                     fechaIngresada = true;
