@@ -92,7 +92,7 @@ namespace HelloWorld
                         Console.Clear();
                         Console.WriteLine("1. Crear y ver BG");
                         Console.WriteLine("2. Crear y ver ER");
-                        Console.WriteLine("3. Visualizar balance de saldos (A medias)");
+                        Console.WriteLine("3. Visualizar balance de saldos");
                         Console.WriteLine("4. Salir");
                         break;
 

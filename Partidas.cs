@@ -21,8 +21,6 @@ namespace ContaConsola
 
             Dictionary<string, int> dict = new Dictionary<string, int>();
 
-            string answer;
-
             switch (Pointer)
             {
                 case 1:
@@ -147,8 +145,8 @@ namespace ContaConsola
 
                 case 2:
                     dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
-                    List<int> debeTotal = new List<int>();
-                    List<int> haberTotal = new List<int>();
+                    List<double> debeTotal = new List<double>();
+                    List<double> haberTotal = new List<double>();
 
 
                     Console.WriteLine("MES A VISUALIZAR: ");
@@ -189,20 +187,20 @@ namespace ContaConsola
                                 {
                                     if (!string.IsNullOrEmpty(ids[2]))
                                     {
-                                        debeTotal.Add(Convert.ToInt32(ids[2]));
+                                        debeTotal.Add(Convert.ToDouble(ids[2]));
                                     }              
                                     
                                     if (!string.IsNullOrEmpty(ids[3]))
                                     {
-                                        haberTotal.Add(Convert.ToInt32(ids[3]));
-                                    }
+                                        haberTotal.Add(Convert.ToDouble(ids[3]));
+                                    } 
                                 }
                                 catch { }
                             }
                         }
 
-                        Console.WriteLine($"La suma de debe es {debeTotal.Sum(x => Convert.ToInt32(x))}");
-                        Console.WriteLine($"La suma de haber es {haberTotal.Sum(x => Convert.ToInt32(x))}");
+                        Console.WriteLine($"La suma de debe es {debeTotal.Sum(x => Convert.ToDouble(x))}");
+                        Console.WriteLine($"La suma de haber es {haberTotal.Sum(x => Convert.ToDouble(x))}");
                         Console.WriteLine("\nPulsa cualquier tecla para salir");
                         Console.ReadLine();
                         Console.Clear();

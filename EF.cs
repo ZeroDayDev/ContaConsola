@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Vml;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,6 @@ namespace ContaConsola
             string nombreArchivo = "junio", archivo = @"c:\ProgramaConta\Partidas\Junio.csv", archivo2 = @"c:\ProgramaConta\EFS\ER_" + nombreArchivo + ".csv";
 
             Dictionary<string, int> dict = new Dictionary<string, int>();
-
-            string answer;
 
             switch (Pointer)
             {
@@ -125,7 +125,7 @@ namespace ContaConsola
                     //Patrimonio
                     double utilidadesAnteriores = 0, patrimonio = 0, reservaLegal = 0;
                     //Ingresos
-                    double ventas;
+                    double ventas = 0;
                     //Gastos
                     double bonificacionIncentiva = 0, horasExtras = 0, sueldos = 0, segurosGasto = 0, cuotaPatronal = 0, aguinaldo = 0, bono14 = 0, papeleriaYUtiles = 0, serviciosTelefonicos = 0;
                     double salarioVentas = 0, salarioAdministracion = 0, horasExtrasVentas = 0, horasExtrasAdmin = 0, bonIncentivoVentas = 0;
@@ -184,51 +184,86 @@ namespace ContaConsola
 
                                 Console.WriteLine(s);
 
-                                caja = calcCuentas("Caja", ids);
-                                bancos = calcCuentas("Bancos", ids);
-                                inventarios = calcCuentas("Inventarios", ids);
-                                clientes = calcCuentas("Clientes", ids);
-                                documentosCobrar = calcCuentas("Documentos por cobrar", ids);
-                                segurosCobrar = calcCuentas("Seguros por cobrar", ids);
-                                ivaCobrar = calcCuentas("IVA por cobrar", ids);
-                                inversiones = calcCuentas("Inversiones", ids);
-                                terrenos = calcCuentas("Terrenos", ids);
-                                maquinaria = calcCuentas("Maquinaria", ids);
-                                vehiculos = calcCuentas("Vehiculos", ids);
-                                mobYequipo = calcCuentas("Mobiliario y equipo", ids);
-                                equipoComputo = calcCuentas("Equipo de computo", ids);
-                                cuotaPatronalPagar = calcCuentas("Cuota patronal por pagar", ids);
-                                cuotaLaboralPagar = calcCuentas("Cuota laboral por pagar", ids);
-                                prestamosBancarios = calcCuentas("Prestamos Bancarios", ids);
-                                proveedores = calcCuentas("Proveedores", ids);
-                                ivaPagar = calcCuentas("IVA por pagar", ids);
-                                acreedores = calcCuentas("Acreedores", ids);
-                                docPagar = calcCuentas("Documentos por pagar", ids);
-                                utilidadesAnteriores = calcCuentas("Utilidades de años anteriores", ids);
-                                patrimonio = calcCuentas("patrimonio", ids);
-                                reservaLegal = calcCuentas("Reserva legal", ids);
-                                ventas = calcCuentas("Ventas", ids);
-                                bonificacionIncentiva = calcCuentas("Bonificacion incentiva", ids);
-                                horasExtras = calcCuentas("Horas extras", ids);
-                                sueldos = calcCuentas("Sueldos", ids);
-                                segurosGasto = calcCuentas("Seguros (Gastos)", ids);
-                                cuotaPatronal = calcCuentas("Cuota patronal", ids);
-                                aguinaldo = calcCuentas("Aguinaldo", ids);
-                                bono14 = calcCuentas("Bono 14", ids);
-                                papeleriaYUtiles = calcCuentas("Papeleria y utiles", ids);
-                                serviciosTelefonicos = calcCuentas("Servicios telefonicos", ids);
-                                salarioVentas = calcCuentas("Salario de Ventas", ids);
-                                salarioAdministracion = calcCuentas("Salario Administracion", ids);
-                                horasExtrasVentas = calcCuentas("Horas extras Ventas", ids);
-                                horasExtrasAdmin = calcCuentas("Horas extras Administracion", ids);
-                                bonIncentivoVentas = calcCuentas("Bonificacion incentivo Ventas", ids);
-                                costoDeVenta = calcCuentas("costo de venta", ids);  
-
-                                total += caja + bancos + inventarios + clientes + documentosCobrar + segurosCobrar + ivaCobrar + inversiones + terrenos + maquinaria + vehiculos + mobYequipo + equipoComputo + cuotaPatronalPagar + cuotaLaboralPagar + prestamosBancarios + proveedores + ivaPagar + acreedores + docPagar + utilidadesAnteriores + patrimonio + reservaLegal + ventas + bonificacionIncentiva + horasExtras+ sueldos + segurosGasto + cuotaPatronal+ aguinaldo + bono14 + papeleriaYUtiles + serviciosTelefonicos + salarioVentas + salarioAdministracion + horasExtrasVentas + horasExtrasAdmin + bonIncentivoVentas + costoDeVenta;
+                                caja += calcCuentas("Caja", ids);
+                                bancos += calcCuentas("Bancos", ids);
+                                clientes += calcCuentas("Clientes", ids);
+                                documentosCobrar += calcCuentas("Documentos por cobrar", ids);
+                                segurosCobrar += calcCuentas("Seguros por cobrar", ids);
+                                ivaCobrar += calcCuentas("IVA por cobrar", ids);
+                                inversiones += calcCuentas("Inversiones", ids);
+                                terrenos += calcCuentas("Terrenos", ids);
+                                maquinaria += calcCuentas("Maquinaria", ids);
+                                vehiculos += calcCuentas("Vehiculos", ids);
+                                mobYequipo += calcCuentas("Mobiliario y equipo", ids);
+                                equipoComputo += calcCuentas("Equipo de computo", ids);
+                                cuotaPatronalPagar += calcCuentas("Cuota patronal por pagar", ids);
+                                cuotaLaboralPagar += calcCuentas("Cuota laboral por pagar", ids);
+                                prestamosBancarios += calcCuentas("Prestamos Bancarios", ids);
+                                proveedores += calcCuentas("Proveedores", ids);
+                                ivaPagar += calcCuentas("IVA por pagar", ids);
+                                acreedores += calcCuentas("Acreedores", ids);
+                                docPagar += calcCuentas("Documentos por pagar", ids);
+                                utilidadesAnteriores += calcCuentas("Utilidades de años anteriores", ids);
+                                patrimonio += calcCuentas("patrimonio", ids);
+                                reservaLegal += calcCuentas("Reserva legal", ids);
+                                ventas += calcCuentas("Ventas", ids);
+                                bonificacionIncentiva += calcCuentas("Bonificacion incentiva", ids);
+                                horasExtras += calcCuentas("Horas extras", ids);
+                                sueldos += calcCuentas("Sueldos", ids);
+                                segurosGasto += calcCuentas("Seguros (Gastos)", ids);
+                                cuotaPatronal += calcCuentas("Cuota patronal", ids);
+                                aguinaldo += calcCuentas("Aguinaldo", ids);
+                                bono14 += calcCuentas("Bono 14", ids);
+                                papeleriaYUtiles += calcCuentas("Papeleria y utiles", ids);
+                                serviciosTelefonicos += calcCuentas("Servicios telefonicos", ids);
+                                salarioVentas += calcCuentas("Salario de Ventas", ids);
+                                salarioAdministracion += calcCuentas("Salario Administracion", ids);
+                                horasExtrasVentas += calcCuentas("Horas extras Ventas", ids);
+                                horasExtrasAdmin += calcCuentas("Horas extras Administracion", ids);
+                                bonIncentivoVentas += calcCuentas("Bonificacion incentivo Ventas", ids);
+                                costoDeVenta += calcCuentas("costo de venta", ids);  
                             }
                         }
+                        Console.WriteLine($"El saldo final de caja: {caja}");
+                        Console.WriteLine($"El saldo final de bancos: {bancos}");
+                        Console.WriteLine($"El saldo final de clientes: {clientes}");
+                        Console.WriteLine($"El saldo final de documentos por cobrar: {documentosCobrar}");
+                        Console.WriteLine($"El saldo final de seguros por cobrar: {segurosCobrar}");
+                        Console.WriteLine($"El saldo final de iva por cobrar: {ivaCobrar}");
+                        Console.WriteLine($"El saldo final de inversiones: {inversiones}");
+                        Console.WriteLine($"El saldo final de terrenos: {terrenos}");
+                        Console.WriteLine($"El saldo final de maquinaria: {maquinaria}");
+                        Console.WriteLine($"El saldo final de vehiculos: {vehiculos}");
+                        Console.WriteLine($"El saldo final de mobiliario y equipo: {mobYequipo}");
+                        Console.WriteLine($"El saldo final de equipo de computo: {equipoComputo}");
+                        Console.WriteLine($"El saldo final de cuota patronal por pagar: {cuotaPatronalPagar}");
+                        Console.WriteLine($"El saldo final de cuota laboral por pagar: {cuotaLaboralPagar}");
+                        Console.WriteLine($"El saldo final de prestamos bancarios: {prestamosBancarios}");
+                        Console.WriteLine($"El saldo final de proveedores: {proveedores}");
+                        Console.WriteLine($"El saldo final de iva por pagar: {ivaPagar}");
+                        Console.WriteLine($"El saldo final de acreedores: {acreedores}");
+                        Console.WriteLine($"El saldo final de documentos por pagar: {docPagar}");
+                        Console.WriteLine($"El saldo final de utilidades de años anteriores: {utilidadesAnteriores}");
+                        Console.WriteLine($"El saldo final de patrimonio: {patrimonio}");
+                        Console.WriteLine($"El saldo final de reserva legal: {reservaLegal}");
+                        Console.WriteLine($"El saldo final de ventas: {ventas}");
+                        Console.WriteLine($"El saldo final de bonificacion incentiva: {bonificacionIncentiva}");
+                        Console.WriteLine($"El saldo final de horas extras: {horasExtras}");
+                        Console.WriteLine($"El saldo final de sueldos: {sueldos}");
+                        Console.WriteLine($"El saldo final de seguros (gasto): {segurosGasto}");
+                        Console.WriteLine($"El saldo final de cuota patronal: {cuotaPatronal}");
+                        Console.WriteLine($"El saldo final de aguinaldo: {aguinaldo}");
+                        Console.WriteLine($"El saldo final de bono 14: {bono14}");
+                        Console.WriteLine($"El saldo final de papeleria y utiles: {papeleriaYUtiles}");
+                        Console.WriteLine($"El saldo final de servicios telefonicos: {serviciosTelefonicos}");
+                        Console.WriteLine($"El saldo final de salario ventas: {salarioVentas}");
+                        Console.WriteLine($"El saldo final de salario administracion: {salarioAdministracion}");
+                        Console.WriteLine($"El saldo final de horas extras de ventas: {horasExtrasVentas}");
+                        Console.WriteLine($"El saldo final de horas extras de administracion: {horasExtrasAdmin}");
+                        Console.WriteLine($"El saldo final de bonificacion incentivo ventas: {bonIncentivoVentas}");
+                        Console.WriteLine($"El saldo final de costo de venta: {costoDeVenta}");
 
-                        Console.WriteLine("La sumatoria es de Q" + total + "\n");
+                        double totalBalance = caja + bancos + clientes + documentosCobrar + segurosCobrar + ivaCobrar + inversiones + terrenos + maquinaria + vehiculos + mobYequipo + equipoComputo + cuotaLaboralPagar + cuotaPatronalPagar + prestamosBancarios + proveedores + ivaPagar + acreedores+docPagar+utilidadesAnteriores+patrimonio+reservaLegal+ventas+bonificacionIncentiva+horasExtras+sueldos+segurosGasto+cuotaPatronal+aguinaldo+bono14+papeleriaYUtiles+serviciosTelefonicos+salarioVentas+salarioAdministracion+horasExtrasVentas+horasExtrasAdmin+bonIncentivoVentas+costoDeVenta;
 
                         Console.WriteLine("\nPulsa cualquier tecla para salir");
                         Console.ReadLine();
@@ -368,8 +403,52 @@ namespace ContaConsola
                                 sw.WriteLine($"ISR: ;Q{ISR}");
                                 sw.WriteLine($"Ganancia del ejercicio: ;Q{total}");
 
-                            }
+                            }                  
                         }
+
+                        if(!File.Exists("C:\\ProgramaConta/EstadoResultado_" + nombreArchivo + ".xlsx"))
+                        {
+                            using (var workbook = new XLWorkbook())
+                            {
+                                var worksheet = workbook.Worksheets.Add("EstadoResultado");
+                                worksheet.Cell("A1").Value = "EMPRESA XY";
+                                worksheet.Cell("A2").Value = $"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}";
+                                worksheet.Cell("A3").Value = $"CIFRAS (Q)";
+                                #region Estilos de celdas titulos
+                                worksheet.Columns("A").AdjustToContents();
+                                worksheet.Columns("B").AdjustToContents();
+                                worksheet.Cell("A1").Style.Fill.SetBackgroundColor(XLColor.DarkBlue); worksheet.Cell("A1").Style.Font.Bold = true; worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.White);
+                                worksheet.Cell("A2").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A2").Style.Font.Bold = true;    worksheet.Cell("A2").Style.Font.SetFontColor(XLColor.White);
+                                worksheet.Cell("A3").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A3").Style.Font.Bold = true;    worksheet.Cell("A3").Style.Font.SetFontColor(XLColor.White);
+                                #endregion
+
+                                worksheet.Cell("A4").Value = $"Ventas:";
+                                worksheet.Cell("B4").Value = ventas;
+                                worksheet.Cell("A5").Value = $"Devoluciones ventas:";
+                                worksheet.Cell("B5").Value = devolucionesVentas;
+                                worksheet.Cell("A6").Value = $"Ventas netas:";
+                                worksheet.Cell("B6").Value = ventasNetas;
+                                worksheet.Cell("A7").Value = $"Costo de venta:";
+                                worksheet.Cell("B7").Value = costoVenta;
+                                worksheet.Cell("A8").Value = $"Utilidades en ventas:";
+                                worksheet.Cell("B8").Value = utilidadVenta;
+                                worksheet.Cell("A9").Value = $"Gastos de operacion:";
+                                worksheet.Cell("B9").Value = gastosOperacion;
+                                worksheet.Cell("A10").Value = $"Utilidad en operacion:";
+                                worksheet.Cell("B10").Value = utilidadOperacion;
+                                worksheet.Cell("A11").Value = $"Utilidad sobre otros gastos e ingresos:";
+                                worksheet.Cell("B11").Value = OtrosGastosIngre;
+                                worksheet.Cell("B12").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+                                worksheet.Cell("A12").Value = $"ISR:";
+                                worksheet.Cell("B12").Value = ISR;
+                                worksheet.Cell("A13").Style.Font.SetFontColor(XLColor.Green);
+                                worksheet.Cell("A13").Style.Fill.SetBackgroundColor(XLColor.LightGreen);
+                                worksheet.Cell("B13").Style.Font.SetFontColor(XLColor.Green);
+                                worksheet.Cell("A13").Value = $"Ganancia del ejercicio:";
+                                worksheet.Cell("B13").Value = $"Q{total}";
+                                workbook.SaveAs("C:\\ProgramaConta/EstadoResultado_" + nombreArchivo + ".xlsx");
+                            }
+                        }        
                     }
 
                     catch (Exception ex)
@@ -402,6 +481,57 @@ namespace ContaConsola
                                 sw.WriteLine($"ISR: ;Q{ISR}");
                                 sw.WriteLine($"Perdida del ejercicio: ;Q{total}");
 
+                            }
+
+                        }
+
+                        if (!File.Exists("C:\\ProgramaConta/EstadoResultado_" + nombreArchivo + ".xlsx"))
+                        {
+
+                            using (var workbook = new XLWorkbook())
+                            {
+                                var worksheet = workbook.Worksheets.Add("EstadoResultado");
+                                worksheet.Cell("A1").Value = "EMPRESA XY";
+                                worksheet.Cell("A2").Value = $"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}";
+                                worksheet.Cell("A3").Value = $"CIFRAS (Q)";
+                                #region Estilos de celdas titulos
+                                
+
+                                worksheet.Cell("A1").Style.Fill.SetBackgroundColor(XLColor.DarkBlue); worksheet.Cell("A1").Style.Font.Bold = true; worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.White);
+                                worksheet.Cell("A2").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A2").Style.Font.Bold = true; worksheet.Cell("A2").Style.Font.SetFontColor(XLColor.White);
+                                worksheet.Cell("A3").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A3").Style.Font.Bold = true; worksheet.Cell("A3").Style.Font.SetFontColor(XLColor.White);
+                                #endregion
+
+                                worksheet.Cell("A4").Value = $"Ventas:";
+                                worksheet.Cell("B4").Value = ventas;
+                                worksheet.Cell("A5").Value = $"Devoluciones ventas:";
+                                worksheet.Cell("B5").Value = devolucionesVentas;
+                                worksheet.Cell("A6").Value = $"Ventas netas:";
+                                worksheet.Cell("B6").Value = ventasNetas;
+                                worksheet.Cell("A7").Value = $"Costo de venta:";
+                                worksheet.Cell("B7").Value = costoVenta;
+                                worksheet.Cell("A8").Value = $"Utilidades en ventas:";
+                                worksheet.Cell("B8").Value = utilidadVenta;
+                                worksheet.Cell("A9").Value = $"Gastos de operacion:";
+                                worksheet.Cell("B9").Value = gastosOperacion;
+                                worksheet.Cell("A10").Value = $"Utilidad en operacion:";
+                                worksheet.Cell("B10").Value = utilidadOperacion;
+                                worksheet.Cell("A11").Value = $"Utilidad sobre otros gastos e ingresos:";
+                                worksheet.Cell("B11").Value = OtrosGastosIngre;
+                                worksheet.Cell("B12").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+                                worksheet.Cell("A12").Value = $"ISR:";
+                                worksheet.Cell("B12").Value = ISR;
+                                worksheet.Cell("A13").Style.Font.SetFontColor(XLColor.Red);
+                                worksheet.Cell("A13").Style.Fill.SetBackgroundColor(XLColor.LightSalmon);
+                                worksheet.Cell("B13").Style.Font.SetFontColor(XLColor.Red);
+                                worksheet.Cell("A13").Value = $"Perdida del ejercicio:";
+                                worksheet.Cell("B13").Value = total;
+
+                                worksheet.Columns("A").AdjustToContents();
+                                worksheet.Columns("B").AdjustToContents();
+
+
+                                workbook.SaveAs("C:\\ProgramaConta/EstadoResultado_" + nombreArchivo + ".xlsx");
                             }
                         }
                     }
@@ -750,6 +880,118 @@ namespace ContaConsola
                             
                             sw.WriteLine($"\nPasivo + capital: ;Q{totalFinal * -1}\n\n");
 
+                        }
+                    }
+
+                    if (!File.Exists("C:\\ProgramaConta/BalanceGeneral_" + nombreArchivo + ".xlsx"))
+                    {
+
+                        using (var workbook = new XLWorkbook())
+                        {
+                            var worksheet = workbook.Worksheets.Add("BalanceGeneral");
+                            worksheet.Cell("A1").Value = "EMPRESA XY";
+                            worksheet.Cell("A2").Value = $"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}";
+                            worksheet.Cell("A3").Value = $"CIFRAS (Q)";
+                            #region Estilos de celdas titulos
+                            
+                            worksheet.Cell("A1").Style.Fill.SetBackgroundColor(XLColor.DarkBlue); worksheet.Cell("A1").Style.Font.Bold = true; worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.White);
+                            worksheet.Cell("A2").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A2").Style.Font.Bold = true; worksheet.Cell("A2").Style.Font.SetFontColor(XLColor.White);
+                            worksheet.Cell("A3").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A3").Style.Font.Bold = true; worksheet.Cell("A3").Style.Font.SetFontColor(XLColor.White);
+                            #endregion
+
+                            worksheet.Cell("A5").Value = $"Disponibilidad efectivo y equivalentes:";
+                            worksheet.Cell("B5").Value = dispYEquivEfectivo;
+                            worksheet.Cell("A6").Value = $"Documentos por cobrar:";
+                            worksheet.Cell("B6").Value = docCobrar;
+                            worksheet.Cell("A7").Value = $"Clientes:";
+                            worksheet.Cell("B7").Value = clientes;
+                            worksheet.Cell("A8").Value = $"Cuentas incobrables:";
+                            worksheet.Cell("B8").Value = cuentasIncobrables;
+                            worksheet.Cell("A9").Value = $"total clientes:";
+                            worksheet.Cell("B9").Value = totalClientes;
+                            worksheet.Cell("A10").Value = $"Inventarios:";
+                            worksheet.Cell("B10").Value = inventarios;
+                            worksheet.Cell("A11").Value = $"Seguros por cobrar:";
+                            worksheet.Cell("B11").Value = segurosPorCobrar;
+                            worksheet.Cell("A12").Value = $"Inversiones";
+                            worksheet.Cell("B12").Value = inversiones;
+                            worksheet.Cell("A13").Value = $"Impuesto por liquidar:";
+                            worksheet.Cell("B13").Value = impuestos;
+                            worksheet.Cell("A14").Value = $"Total activo corriente:";
+                            worksheet.Cell("B14").Value = activoCorriente;
+                            worksheet.Cell("B14").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A16").Value = $"Documentos por cobrar:";
+                            worksheet.Cell("B16").Value = docCobrar2;
+                            worksheet.Cell("A17").Value = $"Inversiones:";
+                            worksheet.Cell("B17").Value = 0;
+                            worksheet.Cell("A18").Value = $"Propiedad, planta y equipo:";
+                            worksheet.Cell("B18").Value = propiedadP;
+                            worksheet.Cell("A19").Value = $"Depreciacion acumulada:";
+                            worksheet.Cell("B19").Value = depreciacion;
+                            worksheet.Cell("A20").Value = $"Total de propiedad, planta y equipo:";
+                            worksheet.Cell("B20").Value = totalpropiedadP;
+                            worksheet.Cell("A21").Value = $"Total activo no corriente:";
+                            worksheet.Cell("B21").Value = activoNoCorriente;
+                            worksheet.Cell("B21").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A23").Value = $"Total activo:";
+                            worksheet.Cell("B23").Value = totalActivo;
+                            worksheet.Cell("B23").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A25").Value = $"Documentos por pagar:";
+                            worksheet.Cell("B25").Value = docPagar * -1;
+                            worksheet.Cell("A26").Value = $"Prestamos bancarios:";
+                            worksheet.Cell("B26").Value = prestBancarios * -1;
+                            worksheet.Cell("A27").Value = $"Acreedores:";
+                            worksheet.Cell("B27").Value = acreedores * -1;
+                            worksheet.Cell("A28").Value = $"Proveedores:";
+                            worksheet.Cell("B28").Value = proveedores * -1;
+                            worksheet.Cell("A29").Value = $"Prestaciones por pagar:";
+                            worksheet.Cell("B29").Value = prestaciones * -1;
+                            worksheet.Cell("A30").Value = $"Debito fiscal:";
+                            worksheet.Cell("B30").Value = debitoFiscal * -1;
+                            worksheet.Cell("A31").Value = $"Total pasivo corriente:";
+                            worksheet.Cell("B31").Value = pasivoCorriente * -1;
+                            worksheet.Cell("B31").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A33").Value = $"Prestamos bancarios:";
+                            worksheet.Cell("B33").Value = prestBancarios2 * -1;
+                            worksheet.Cell("A34").Value = $"Documentos por pagar:";
+                            worksheet.Cell("B34").Value = docPagar2 * -1;
+                            worksheet.Cell("A35").Value = $"Hipotecas:";
+                            worksheet.Cell("B35").Value = hipotecas * -1;
+                            worksheet.Cell("A36").Value = $"Total pasivo no corriente:";
+                            worksheet.Cell("B36").Value = pasivoNoCorriente * -1;
+                            worksheet.Cell("B31").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A38").Value = $"Total pasivo:";
+                            worksheet.Cell("B38").Value = totalPasivo * -1;
+                            worksheet.Cell("B38").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A40").Value = $"Capital:";
+                            worksheet.Cell("B40").Value = capital * -1;
+                            worksheet.Cell("A41").Value = $"Utilidades de años anteriores:";
+                            worksheet.Cell("B41").Value = utilidades * -1;
+                            worksheet.Cell("A42").Value = $"Reserva legal:";
+                            worksheet.Cell("B42").Value = reservaLegal * -1;
+                            worksheet.Cell("A43").Value = $"Utilidad del ejercicio (Perdida o ganancia):";
+                            worksheet.Cell("B43").Value = utilidadEjercicio * -1;
+                            worksheet.Cell("B43").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A45").Value = $"Total de capital:";
+                            worksheet.Cell("B45").Value = totalCapital * -1;
+                            worksheet.Cell("B45").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A47").Value = $"Pasivo + capital:";
+                            worksheet.Cell("B47").Value = totalFinal * -1;
+                            worksheet.Cell("B47").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Columns("A").AdjustToContents();
+                            worksheet.Columns("B").AdjustToContents();
+
+
+                            workbook.SaveAs("C:\\ProgramaConta/BalanceGeneral_" + nombreArchivo + ".xlsx");
                         }
                     }
                 } catch(Exception ex) { Console.WriteLine(ex.ToString()); } 

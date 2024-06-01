@@ -9,15 +9,9 @@ namespace ContaConsola
 
         public class BalanceGeneral
         {
-            private long ID;
-            private string[] fechas = Array.Empty<string>();
-            private Cuentas[] cuentas = Array.Empty<Cuentas>();
         }
         public class EstadoDeResultados
         {
-            private long ID;
-            private string[] fechas = Array.Empty<string>();
-            private Cuentas[] cuentas = Array.Empty<Cuentas>();
         }
         public class Cuentas
         {
