@@ -133,7 +133,7 @@ namespace HelloWorld
                         Console.Clear();
                         break;
                     default:
-                        Console.WriteLine("Error p");
+                        Console.WriteLine("Error, seleccion incorrecta");
                         break;
 
                 }

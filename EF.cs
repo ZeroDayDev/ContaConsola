@@ -137,7 +137,6 @@ namespace ContaConsola
                     Console.WriteLine("MES A VISUALIZAR: ");
                     Console.WriteLine("1. JUNIO");
                     Console.WriteLine("2. JULIO");
-                    Console.WriteLine("3. AMBOS");
                     string archivoAElegir4 = Console.ReadLine().ToLower();
                     string archivo3 = @"c:\ProgramaConta\Partidas\Junio.csv";
 
@@ -149,14 +148,6 @@ namespace ContaConsola
 
                     if (archivoAElegir4.Contains("jul") || archivoAElegir4.Contains("2"))
                     {
-                        nombreArchivo = "julio";
-                        archivo3 = @"c:\ProgramaConta\Partidas\Julio.csv";
-                    }
-                    if (archivoAElegir4.Contains("am") || archivoAElegir4.Contains("3"))
-                    {
-                        nombreArchivo = "junio";
-                        archivo3 = @"c:\ProgramaConta\Partidas\Junio.csv";
-
                         nombreArchivo = "julio";
                         archivo3 = @"c:\ProgramaConta\Partidas\Julio.csv";
                     }
@@ -415,8 +406,7 @@ namespace ContaConsola
                                 worksheet.Cell("A2").Value = $"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}";
                                 worksheet.Cell("A3").Value = $"CIFRAS (Q)";
                                 #region Estilos de celdas titulos
-                                worksheet.Columns("A").AdjustToContents();
-                                worksheet.Columns("B").AdjustToContents();
+       
                                 worksheet.Cell("A1").Style.Fill.SetBackgroundColor(XLColor.DarkBlue); worksheet.Cell("A1").Style.Font.Bold = true; worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.White);
                                 worksheet.Cell("A2").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A2").Style.Font.Bold = true;    worksheet.Cell("A2").Style.Font.SetFontColor(XLColor.White);
                                 worksheet.Cell("A3").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A3").Style.Font.Bold = true;    worksheet.Cell("A3").Style.Font.SetFontColor(XLColor.White);
@@ -446,6 +436,10 @@ namespace ContaConsola
                                 worksheet.Cell("B13").Style.Font.SetFontColor(XLColor.Green);
                                 worksheet.Cell("A13").Value = $"Ganancia del ejercicio:";
                                 worksheet.Cell("B13").Value = $"Q{total}";
+
+                                worksheet.Columns("A").AdjustToContents();
+                                worksheet.Columns("B").AdjustToContents();
+
                                 workbook.SaveAs("C:\\ProgramaConta/EstadoResultado_" + nombreArchivo + ".xlsx");
                             }
                         }        
