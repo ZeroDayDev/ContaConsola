@@ -35,39 +35,54 @@ namespace ContaConsola
                 {
                     using (StreamWriter sw = File.CreateText(filePath))
                     {
-                        sw.WriteLine("1;Activos");
-                        sw.WriteLine("11;Activos Corrientes");
+                        //Activos corrientes
                         sw.WriteLine("111;Caja");
                         sw.WriteLine("112;Bancos");
                         sw.WriteLine("113;Inventarios");
-                        sw.WriteLine("114;Clientes");
+                        sw.WriteLine("114;Clientes corrientes");
                         sw.WriteLine("115;Documentos por cobrar");
                         sw.WriteLine("116;Seguros por cobrar");
                         sw.WriteLine("117;IVA por cobrar");
-                        sw.WriteLine("118;Inversiones");
-                        sw.WriteLine("12;Activos No corrientes");
-                        sw.WriteLine("121;Activos fijos	");
+                        sw.WriteLine("118;Inversiones corrientes");
+                        sw.WriteLine("119;Inversiones efectivo");
+                        //Activos fijos
                         sw.WriteLine("1211;Terrenos");
                         sw.WriteLine("1212;Maquinaria");
                         sw.WriteLine("1213;Vehiculos");
                         sw.WriteLine("1214;Mobiliario y equipo");
-                        sw.WriteLine("1215;Equipo de computo");
-                        sw.WriteLine("2;Pasivos");
-                        sw.WriteLine("21;Pasivos No corrientes");
+                        sw.WriteLine("1215;Edificios");
+                        sw.WriteLine("1216;Equipo de computo");
+                        sw.WriteLine("1216;Herramientas");
+                        //Reg. Activos
+                        sw.WriteLine("131;Estimacion para cuentas incobrables");
+                        sw.WriteLine("132;Depreciacion acumulada");
+                        //Activos no corrientes
+                        sw.WriteLine("141;Inversiones no corrientes");
+                        sw.WriteLine("142;Clientes no corrientes");
+                        //Pasivos no corriente
                         sw.WriteLine("211;Cuota patronal por pagar");
                         sw.WriteLine("212;Cuota laboral por pagar");
-                        sw.WriteLine("213;Prestamos Bancarios");
-                        sw.WriteLine("214;Proveedores");
+                        sw.WriteLine("213;Prestamos bancarios no corrientes");
+                        sw.WriteLine("214;Proveedores no corrientes");
                         sw.WriteLine("215;IVA por pagar");
-                        sw.WriteLine("216;Acreedores");
+                        sw.WriteLine("216;Acreedores no corrientes");
                         sw.WriteLine("217;Documentos por pagar");
-                        sw.WriteLine("3;Patrimonio");
+                        sw.WriteLine("218;Debito fiscal");
+                        //Pasivos corrientes
+                        sw.WriteLine("221;Prestamos bancarios corrientes");
+                        sw.WriteLine("222;Depreciaciones");
+                        sw.WriteLine("223;Documentos por pagar corrientes");
+                        sw.WriteLine("224;Proveedores corrientes");
+                        sw.WriteLine("225;Acreedores corrientes");
+                        sw.WriteLine("226;Sueldos por pagar");
+                        //Patrimonio
                         sw.WriteLine("31;Utilidades de años anteriores");
                         sw.WriteLine("32;patrimonio");
                         sw.WriteLine("33;Reserva legal");
-                        sw.WriteLine("4;Ingresos");
+                        sw.WriteLine("33;Capital en acciones");
+                        //Ingresos
                         sw.WriteLine("41;Ventas");
-                        sw.WriteLine("5;Gastos");
+                        //Gastos
                         sw.WriteLine("51;Bonificacion incentiva");
                         sw.WriteLine("52;Horas extras");
                         sw.WriteLine("53;Sueldos");
@@ -77,12 +92,13 @@ namespace ContaConsola
                         sw.WriteLine("57;Bono 14");
                         sw.WriteLine("58;Papeleria y utiles");
                         sw.WriteLine("59;Servicios telefonicos");
-                        sw.WriteLine("510;Salario de Ventas");
-                        sw.WriteLine("511;Salario Administracion");
-                        sw.WriteLine("512;Horas extras Ventas");
-                        sw.WriteLine("513;Horas extras Administracion");
-                        sw.WriteLine("514;Bonificacion incentivo Ventas");
-                        sw.WriteLine("6;Costos de venta");
+                        sw.WriteLine("510;Servicios de luz y agua");
+                        sw.WriteLine("511;Salario de Ventas");
+                        sw.WriteLine("512;Salario Administracion");
+                        sw.WriteLine("513;Horas extras Ventas");
+                        sw.WriteLine("514;Horas extras Administracion");
+                        sw.WriteLine("515;Bonificacion incentivo Ventas");
+                        //Costo de venta
                         sw.WriteLine("61;costo de venta");
 
                     }

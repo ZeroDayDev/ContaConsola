@@ -37,7 +37,7 @@ namespace ContaConsola
                     valores.Add(valor);
                 }
 
-                else if (Clasificacion == "Pasivos" || Clasificacion == "Pasivos No corrientes" || Clasificacion == "Patrimonio" || Clasificacion == "Ingresos")
+                else if (Clasificacion == "Pasivos" || Clasificacion == "Pasivos No corrientes" || Clasificacion == "Patrimonio" || Clasificacion == "Ingresos" || Clasificacion == "Regulador de activos")
                 {
                     double valorNum = Convert.ToDouble(valor);
 
@@ -111,12 +111,18 @@ namespace ContaConsola
                     }                    
                     if (idSumando.StartsWith("12"))
                     {
-                        clasfFinal = "Activos No corrientes";
-                    }
-                    if (idSumando.StartsWith("121"))
-                    {
                         clasfFinal = "Activos Fijos";
                     }
+                    if (idSumando.StartsWith("13"))
+                    {
+                        clasfFinal = "Regulador de activos";
+                    }                   
+                    if (idSumando.StartsWith("14"))
+                    {
+                        clasfFinal = "Activos no corrientes";
+                    }
+
+
                 }
 
                 if (idSumando.StartsWith("2"))
@@ -127,6 +133,11 @@ namespace ContaConsola
                     {
                         clasfFinal = "Pasivos No corrientes";
                     }
+                    if (idSumando.StartsWith("22"))
+                    {
+                        clasfFinal = "Pasivos Corrientes";
+                    }
+
                 }
 
                 if (idSumando.StartsWith("3"))

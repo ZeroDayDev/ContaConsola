@@ -324,7 +324,7 @@ namespace ContaConsola
                             {
                                 costoVenta += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Bonificacion incentiva" || ids[1] == "Horas extras" || ids[1] == "Sueldos" || ids[1] == "Seguros (Gastos)" || ids[1] == "Cuota patronal" || ids[1] == "Aguinaldo" || ids[1] == "Bono 14" || ids[1] == "Papeleria y utiles" || ids[1] == "Servicios telefonicos" || ids[1] == "Salario de Ventas" || ids[1] == "Salario Administracion" || ids[1] == "Horas extras Ventas" || ids[1] == "Horas extras Administracion" || ids[1] == "Bonificacion incentivo Ventas")
+                            if (ids[1] == "Bonificacion incentiva" || ids[1] == "Horas extras" || ids[1] == "Depreciaciones" || ids[1] == "Sueldos" || ids[1] == "Seguros (Gastos)" || ids[1] == "Cuota patronal" || ids[1] == "Aguinaldo" || ids[1] == "Bono 14" || ids[1] == "Papeleria y utiles" || ids[1] == "Servicios telefonicos" || ids[1] == "Servicios de luz y agua" || ids[1] == "Salario de Ventas" || ids[1] == "Salario Administracion" || ids[1] == "Horas extras Ventas" || ids[1] == "Horas extras Administracion" || ids[1] == "Bonificacion incentivo Ventas")
                             {
                                 if (!string.IsNullOrEmpty(ids[3]))
                                 {
@@ -391,8 +391,8 @@ namespace ContaConsola
                                 sw.WriteLine($"Gastos de operacion: ;Q{gastosOperacion}");
                                 sw.WriteLine($"Utilidad en operacion: ;Q{utilidadOperacion}");
                                 sw.WriteLine($"Utilidad sobre otros gastos e ingresos: ;Q{OtrosGastosIngre}");
-                                sw.WriteLine($"ISR: ;Q{ISR}");
-                                sw.WriteLine($"Ganancia del ejercicio: ;Q{total}");
+                                sw.WriteLine($"ISR: ;Q{utilidadOperacion * 0.25}");
+                                sw.WriteLine($"Ganancia del ejercicio: ;Q{total - (utilidadOperacion * 0.25)}");
 
                             }                  
                         }
@@ -430,12 +430,12 @@ namespace ContaConsola
                                 worksheet.Cell("B11").Value = OtrosGastosIngre;
                                 worksheet.Cell("B12").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
                                 worksheet.Cell("A12").Value = $"ISR:";
-                                worksheet.Cell("B12").Value = ISR;
+                                worksheet.Cell("B12").Value = utilidadOperacion * 0.25;
                                 worksheet.Cell("A13").Style.Font.SetFontColor(XLColor.Green);
                                 worksheet.Cell("A13").Style.Fill.SetBackgroundColor(XLColor.LightGreen);
                                 worksheet.Cell("B13").Style.Font.SetFontColor(XLColor.Green);
                                 worksheet.Cell("A13").Value = $"Ganancia del ejercicio:";
-                                worksheet.Cell("B13").Value = $"Q{total}";
+                                worksheet.Cell("B13").Value = $"Q{total - (utilidadOperacion * 0.25)}";
 
                                 worksheet.Columns("A").AdjustToContents();
                                 worksheet.Columns("B").AdjustToContents();
@@ -472,7 +472,7 @@ namespace ContaConsola
                                 sw.WriteLine($"Gastos de operacion: ;Q{gastosOperacion}");
                                 sw.WriteLine($"Utilidad en operacion: ;Q{utilidadOperacion}");
                                 sw.WriteLine($"Utilidad sobre otros gastos e ingresos: ;Q{OtrosGastosIngre}");
-                                sw.WriteLine($"ISR: ;Q{ISR}");
+                                sw.WriteLine($"ISR: ;Q0");
                                 sw.WriteLine($"Perdida del ejercicio: ;Q{total}");
 
                             }
@@ -514,12 +514,12 @@ namespace ContaConsola
                                 worksheet.Cell("B11").Value = OtrosGastosIngre;
                                 worksheet.Cell("B12").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
                                 worksheet.Cell("A12").Value = $"ISR:";
-                                worksheet.Cell("B12").Value = ISR;
+                                worksheet.Cell("B12").Value = utilidadOperacion * 0.25;
                                 worksheet.Cell("A13").Style.Font.SetFontColor(XLColor.Red);
                                 worksheet.Cell("A13").Style.Fill.SetBackgroundColor(XLColor.LightSalmon);
                                 worksheet.Cell("B13").Style.Font.SetFontColor(XLColor.Red);
                                 worksheet.Cell("A13").Value = $"Perdida del ejercicio:";
-                                worksheet.Cell("B13").Value = total;
+                                worksheet.Cell("B13").Value = $"Q{total - (utilidadOperacion * 0.25)}";
 
                                 worksheet.Columns("A").AdjustToContents();
                                 worksheet.Columns("B").AdjustToContents();
@@ -549,11 +549,11 @@ namespace ContaConsola
         {
             dict = FileManagerSystem.LecturaNomenclatura(@"c:\ProgramaConta\Nomenclatura1.csv", false);
             double activoCorriente = 0, dispYEquivEfectivo = 0, docCobrar = 0, clientes = 0, cuentasIncobrables= 0, totalClientes = 0, inventarios = 0, segurosPorCobrar = 0, Inversiones = 0, impuestos = 0;
-            double activoNoCorriente = 0, docCobrar2 = 0, inversiones = 0, propiedadP = 0, depreciacion = 0, totalpropiedadP = 0;
+            double activoNoCorriente = 0, inversiones = 0, inversionesNoCorrientes = 0, clientesNoCorriente = 0, propiedadP = 0, depreciacionAcumulada = 0, totalpropiedadP = 0;
             double totalActivo = 0;
 
-            double pasivoCorriente = 0, docPagar = 0, prestBancarios = 0, acreedores = 0, proveedores = 0, debitoFiscal = 0, prestaciones = 0;
-            double pasivoNoCorriente = 0, prestBancarios2 = 0, docPagar2 = 0, hipotecas = 0;
+            double pasivoCorriente = 0, docPagarCorrientes = 0, prestBancariosCorrientes = 0, acreedores = 0, proveedores = 0, debitoFiscal = 0, prestaciones = 0, sueldosPorPagar = 0;
+            double pasivoNoCorriente = 0, prestBancarios = 0, docPagar = 0, hipotecas = 0, proovedoresNoCorrientes = 0, acreedoresNoCorrientes = 0;
             double totalPasivo = 0;
 
             double totalCapital = 0, capital = 0, utilidades = 0, reservaLegal = 0, utilidadEjercicio = 0, pasivoCapital = 0;
@@ -602,13 +602,22 @@ namespace ContaConsola
                         try
                         {
 
-                            if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Caja" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Caja" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Inversiones efectivo" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 dispYEquivEfectivo += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Caja" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Bancos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Caja" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Inversiones efectivo" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 dispYEquivEfectivo -= Convert.ToDouble(ids[3]);
+                            }
+
+                            if (ids[1] == "Estimacion para cuentas incobrables" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                cuentasIncobrables += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Estimacion para cuentas incobrables" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                cuentasIncobrables -= Convert.ToDouble(ids[3]);
                             }
 
                             if (ids[1] == "Documentos por cobrar" && !string.IsNullOrEmpty(ids[2]))
@@ -620,11 +629,11 @@ namespace ContaConsola
                                 docCobrar -= Convert.ToDouble(ids[3]);
                             }
 
-                            if (ids[1] == "Clientes" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Clientes corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 clientes += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Clientes" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Clientes corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 clientes -= Convert.ToDouble(ids[3]);
                             }
@@ -656,75 +665,103 @@ namespace ContaConsola
                                 impuestos -= Convert.ToDouble(ids[3]);
                             }
 
-                            if (ids[1] == "Inversiones" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Inversiones corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 inversiones += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Inversiones" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Inversiones corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 inversiones -= Convert.ToDouble(ids[3]);
                             }
 
-                            totalClientes = clientes - cuentasIncobrables;
+                            totalClientes = clientes - (cuentasIncobrables*-1);
 
                             activoCorriente = dispYEquivEfectivo + docCobrar + totalClientes + inventarios + segurosPorCobrar + inversiones + impuestos;                            
 
-                            if (ids[1] == "Terrenos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Maquinaria" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Vehiculos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Mobiliario y equipo" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Equipo de computo" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Terrenos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Herramientas" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Edificios" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Maquinaria" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Vehiculos" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Mobiliario y equipo" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Equipo de computo" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 propiedadP += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Terrenos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Maquinaria" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Vehiculos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Mobiliario y equipo" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Equipo de computo" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Terrenos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Edificios" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Herramientas" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Maquinaria" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Vehiculos" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Mobiliario y equipo" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Equipo de computo" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 propiedadP -= Convert.ToDouble(ids[3]);
                             }
 
-                            propiedadP -= depreciacion;
-                            activoNoCorriente = docCobrar2 + propiedadP;
+                            if (ids[1] == "Inversiones no corrientes" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                inversionesNoCorrientes += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Inversiones no corrientes" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                inversionesNoCorrientes -= Convert.ToDouble(ids[3]);
+                            }
+
+                            if (ids[1] == "Depreciacion acumulada" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                depreciacionAcumulada += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Depreciacion acumulada" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                depreciacionAcumulada -= Convert.ToDouble(ids[3]);
+                            }
+                            
+                            if (ids[1] == "Clientes no corrientes" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                clientesNoCorriente += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Clientes no corrientes" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                clientesNoCorriente -= Convert.ToDouble(ids[3]);
+                            }
+
+
+                            totalpropiedadP = propiedadP + depreciacionAcumulada;
+                            activoNoCorriente = inversionesNoCorrientes + totalpropiedadP + clientesNoCorriente;
 
                             totalActivo = activoCorriente + activoNoCorriente;
 
 
-                            if (ids[1] == "Documentos por pagar" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Documentos por pagar corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 docPagar += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Documentos por pagar" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Documentos por pagar corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 docPagar -= Convert.ToDouble(ids[3]);
                             }
 
-                            if (ids[1] == "Prestamos Bancarios" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Prestamos bancarios corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 prestBancarios += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Prestamos Bancarios" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Prestamos bancarios corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 prestBancarios -= Convert.ToDouble(ids[3]);
                             }
 
-                            if (ids[1] == "Acreedores" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Acreedores corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 acreedores += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Acreedores" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Acreedores corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 acreedores -= Convert.ToDouble(ids[3]);
                             }
 
-                            if (ids[1] == "Proveedores" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Proveedores corrientes" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 proveedores += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Proveedores" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Proveedores corrientes" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 proveedores -= Convert.ToDouble(ids[3]);
                             }     
 
-                            if (ids[1] == "IVA por pagar" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "IVA por pagar" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Debito fiscal" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 debitoFiscal += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "IVA por pagar" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "IVA por pagar" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Debito fiscal" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 debitoFiscal -= Convert.ToDouble(ids[3]);
                             }
@@ -740,14 +777,65 @@ namespace ContaConsola
                                 Console.WriteLine(prestaciones);
                             }
 
-                            pasivoCorriente = docPagar + prestBancarios + acreedores + proveedores + prestaciones + debitoFiscal;
+                            if (ids[1] == "Sueldos por pagar" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                sueldosPorPagar += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Sueldos por pagar" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                sueldosPorPagar -= Convert.ToDouble(ids[3]);
+                            }
+
+
+                            //ESTO SERIA PASIVO NO CORRIENTE
+                            pasivoCorriente = docPagar + prestBancarios + acreedores + proveedores + prestaciones + debitoFiscal + sueldosPorPagar;
+
+
+                            if (ids[1] == "Documentos por pagar" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                docPagarCorrientes += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Documentos por pagar" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                docPagarCorrientes -= Convert.ToDouble(ids[3]);
+                            }
+
+                            if (ids[1] == "Acreedores no corrientes" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                acreedoresNoCorrientes += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Acreedores no corrientes" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                acreedoresNoCorrientes -= Convert.ToDouble(ids[3]);
+                            }
+                            if (ids[1] == "Proveedores no corrientes" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                proovedoresNoCorrientes += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Proveedores no corrientes" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                proovedoresNoCorrientes -= Convert.ToDouble(ids[3]);
+                            }
+
+                            if (ids[1] == "Prestamos bancarios no corrientes" && !string.IsNullOrEmpty(ids[2]))
+                            {
+                                prestBancariosCorrientes += Convert.ToDouble(ids[2]);
+                            }
+                            if (ids[1] == "Prestamos bancarios no corrientes" && !string.IsNullOrEmpty(ids[3]))
+                            {
+                                prestBancariosCorrientes -= Convert.ToDouble(ids[3]);
+                            }
+
+                            //ESTO SERIA PASIVO CORRIENTE
+                            pasivoNoCorriente = prestBancariosCorrientes + docPagarCorrientes + acreedoresNoCorrientes + proovedoresNoCorrientes;
+
                             totalPasivo = pasivoCorriente + pasivoNoCorriente;
 
-                            if (ids[1] == "Patrimonio" && !string.IsNullOrEmpty(ids[2]))
+                            if (ids[1] == "Patrimonio" && !string.IsNullOrEmpty(ids[2]) || ids[1] == "Capital en acciones" && !string.IsNullOrEmpty(ids[2]))
                             {
                                 capital += Convert.ToDouble(ids[2]);
                             }
-                            if (ids[1] == "Patrimonio" && !string.IsNullOrEmpty(ids[3]))
+                            if (ids[1] == "Patrimonio" && !string.IsNullOrEmpty(ids[3]) || ids[1] == "Capital en acciones" && !string.IsNullOrEmpty(ids[3]))
                             {
                                 capital -= Convert.ToDouble(ids[3]);
                             }                            
@@ -790,11 +878,11 @@ namespace ContaConsola
                 Console.WriteLine($"Impuesto por liquidar: Q{impuestos}");
                 Console.WriteLine($"\nTotal activo corriente: Q{activoCorriente}\n");  
                 
-                Console.WriteLine($"Documentos por cobrar: Q{docCobrar2}");
-                Console.WriteLine($"Inversiones: Q0");
+                Console.WriteLine($"Inversiones: Q{inversionesNoCorrientes}");
                 Console.WriteLine($"Propiedad, planta y equipo: Q{propiedadP}");
-                Console.WriteLine($"Depreciacion acumulada: Q{depreciacion}");
+                Console.WriteLine($"Depreciacion acumulada: Q{depreciacionAcumulada}");
                 Console.WriteLine($"Total de propiedad, planta y equipo: Q{propiedadP}");
+                Console.WriteLine($"Clientes: Q{clientesNoCorriente}");
                 Console.WriteLine($"\nTotal activo no corriente: Q{activoNoCorriente}\n");
 
                 Console.WriteLine($"\nTotal activo: Q{totalActivo}\n\n");                
@@ -807,8 +895,8 @@ namespace ContaConsola
                 Console.WriteLine($"Debito fiscal: Q{debitoFiscal}");
                 Console.WriteLine($"\nTotal pasivo corriente: Q{pasivoCorriente}\n");
                 
-                Console.WriteLine($"Prestamos bancarios: Q{prestBancarios2}");
-                Console.WriteLine($"Documentos por pagar: Q{docPagar2}");
+                Console.WriteLine($"Prestamos bancarios: Q{prestBancariosCorrientes}");
+                Console.WriteLine($"Documentos por pagar: Q{docPagarCorrientes}");
                 Console.WriteLine($"Hipotecas: Q{hipotecas}");
                 Console.WriteLine($"\nTotal pasivo no corriente: Q{pasivoNoCorriente}\n");
 
@@ -841,12 +929,12 @@ namespace ContaConsola
                             sw.WriteLine($"Inversiones: ;Q{inversiones}");
                             sw.WriteLine($"Impuesto por liquidar: ;Q{impuestos}");
                             sw.WriteLine($"\nTotal activo corriente: ;Q{activoCorriente}\n");
-                            
-                            sw.WriteLine($"Documentos por cobrar: ;Q{docCobrar2}");
-                            sw.WriteLine($"Inversiones: ;Q0");
+
+                            sw.WriteLine($"Inversiones: ;Q{inversionesNoCorrientes}");
                             sw.WriteLine($"Propiedad, planta y equipo: ;Q{propiedadP}");
-                            sw.WriteLine($"Depreciacion acumulada: ;Q{depreciacion}");
+                            sw.WriteLine($"Depreciacion acumulada: ;Q{depreciacionAcumulada}");
                             sw.WriteLine($"Total de propiedad, planta y equipo: ;Q{totalpropiedadP}");
+                            sw.WriteLine($"Clientes: ;Q{clientesNoCorriente}");
                             sw.WriteLine($"\nTotal activo no corriente: ;Q{activoNoCorriente}\n");
                             
                             sw.WriteLine($"\nTotal activo: ;Q{totalActivo}\n\n");
@@ -859,8 +947,8 @@ namespace ContaConsola
                             sw.WriteLine($"Debito fiscal: ;Q{debitoFiscal * -1}");
                             sw.WriteLine($"\nTotal pasivo corriente: ;Q{pasivoCorriente * -1}\n");
                             
-                            sw.WriteLine($"Prestamos bancarios: ;Q{prestBancarios2 * -1}");
-                            sw.WriteLine($"Documentos por pagar: ;Q{docPagar2 * -1}");
+                            sw.WriteLine($"Prestamos bancarios: ;Q{prestBancariosCorrientes * -1}");
+                            sw.WriteLine($"Documentos por pagar: ;Q{docPagarCorrientes * -1}");
                             sw.WriteLine($"Hipotecas: ;Q{hipotecas * -1}");
                             sw.WriteLine($"\nTotal pasivo no corriente: ;Q{pasivoNoCorriente * -1}\n");
                             
@@ -887,7 +975,7 @@ namespace ContaConsola
                             worksheet.Cell("A2").Value = $"POR EL MES TERMINADO DE {nombreArchivo.ToUpper()}";
                             worksheet.Cell("A3").Value = $"CIFRAS (Q)";
                             #region Estilos de celdas titulos
-                            
+
                             worksheet.Cell("A1").Style.Fill.SetBackgroundColor(XLColor.DarkBlue); worksheet.Cell("A1").Style.Font.Bold = true; worksheet.Cell("A1").Style.Font.SetFontColor(XLColor.White);
                             worksheet.Cell("A2").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A2").Style.Font.Bold = true; worksheet.Cell("A2").Style.Font.SetFontColor(XLColor.White);
                             worksheet.Cell("A3").Style.Fill.SetBackgroundColor(XLColor.Blue); worksheet.Cell("A3").Style.Font.Bold = true; worksheet.Cell("A3").Style.Font.SetFontColor(XLColor.White);
@@ -915,16 +1003,16 @@ namespace ContaConsola
                             worksheet.Cell("B14").Value = activoCorriente;
                             worksheet.Cell("B14").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
-                            worksheet.Cell("A16").Value = $"Documentos por cobrar:";
-                            worksheet.Cell("B16").Value = docCobrar2;
-                            worksheet.Cell("A17").Value = $"Inversiones:";
-                            worksheet.Cell("B17").Value = 0;
-                            worksheet.Cell("A18").Value = $"Propiedad, planta y equipo:";
-                            worksheet.Cell("B18").Value = propiedadP;
-                            worksheet.Cell("A19").Value = $"Depreciacion acumulada:";
-                            worksheet.Cell("B19").Value = depreciacion;
-                            worksheet.Cell("A20").Value = $"Total de propiedad, planta y equipo:";
-                            worksheet.Cell("B20").Value = totalpropiedadP;
+                            worksheet.Cell("A16").Value = $"Inversiones:";
+                            worksheet.Cell("B16").Value = inversionesNoCorrientes;
+                            worksheet.Cell("A17").Value = $"Propiedad, planta y equipo  :";
+                            worksheet.Cell("B17").Value = propiedadP;
+                            worksheet.Cell("A18").Value = $"Depreciacion acumulada:";
+                            worksheet.Cell("B18").Value = depreciacionAcumulada;
+                            worksheet.Cell("A19").Value = $"Total de propiedad, planta y equipo:";
+                            worksheet.Cell("B19").Value = totalpropiedadP;
+                            worksheet.Cell("A20").Value = $"Clientes:";
+                            worksheet.Cell("B20").Value = clientesNoCorriente;
                             worksheet.Cell("A21").Value = $"Total activo no corriente:";
                             worksheet.Cell("B21").Value = activoNoCorriente;
                             worksheet.Cell("B21").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
@@ -933,6 +1021,8 @@ namespace ContaConsola
                             worksheet.Cell("B23").Value = totalActivo;
                             worksheet.Cell("B23").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
+                            worksheet.Cell("A24").Value = $"Sueldos por pagar:";
+                            worksheet.Cell("B24").Value = sueldosPorPagar * -1;
                             worksheet.Cell("A25").Value = $"Documentos por pagar:";
                             worksheet.Cell("B25").Value = docPagar * -1;
                             worksheet.Cell("A26").Value = $"Prestamos bancarios:";
@@ -945,41 +1035,50 @@ namespace ContaConsola
                             worksheet.Cell("B29").Value = prestaciones * -1;
                             worksheet.Cell("A30").Value = $"Debito fiscal:";
                             worksheet.Cell("B30").Value = debitoFiscal * -1;
-                            worksheet.Cell("A31").Value = $"Total pasivo corriente:";
-                            worksheet.Cell("B31").Value = pasivoCorriente * -1;
-                            worksheet.Cell("B31").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+                            worksheet.Cell("A31").Value = $"Impuestos por pagar:";
+                            worksheet.Cell("B31").Value = 0;
+                            worksheet.Cell("C31").Value = "HAY QUE HACER UN SUM Y REVERTIR EL NEGATIVO EN SUELDOS";
+
+                            worksheet.Cell("A32").Value = $"Total pasivo corriente";
+                            worksheet.Cell("B32").Value = pasivoCorriente;
+                            worksheet.Cell("B32").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
                             worksheet.Cell("A33").Value = $"Prestamos bancarios:";
-                            worksheet.Cell("B33").Value = prestBancarios2 * -1;
+                            worksheet.Cell("B33").Value = prestBancariosCorrientes * -1;
                             worksheet.Cell("A34").Value = $"Documentos por pagar:";
-                            worksheet.Cell("B34").Value = docPagar2 * -1;
+                            worksheet.Cell("B34").Value = docPagarCorrientes * -1;
                             worksheet.Cell("A35").Value = $"Hipotecas:";
                             worksheet.Cell("B35").Value = hipotecas * -1;
-                            worksheet.Cell("A36").Value = $"Total pasivo no corriente:";
-                            worksheet.Cell("B36").Value = pasivoNoCorriente * -1;
-                            worksheet.Cell("B31").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
-
-                            worksheet.Cell("A38").Value = $"Total pasivo:";
-                            worksheet.Cell("B38").Value = totalPasivo * -1;
+                            worksheet.Cell("A36").Value = $"Proveedores:";
+                            worksheet.Cell("B36").Value = proovedoresNoCorrientes * -1;
+                            worksheet.Cell("A37").Value = $"Acreedores:";
+                            worksheet.Cell("B37").Value = acreedoresNoCorrientes * -1;
+                            worksheet.Cell("A38").Value = $"Total pasivo no corriente:";
+                            worksheet.Cell("B38").Value = pasivoNoCorriente * -1;
                             worksheet.Cell("B38").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
-                            worksheet.Cell("A40").Value = $"Capital:";
-                            worksheet.Cell("B40").Value = capital * -1;
-                            worksheet.Cell("A41").Value = $"Utilidades de años anteriores:";
-                            worksheet.Cell("B41").Value = utilidades * -1;
-                            worksheet.Cell("A42").Value = $"Reserva legal:";
-                            worksheet.Cell("B42").Value = reservaLegal * -1;
-                            worksheet.Cell("A43").Value = $"Utilidad del ejercicio (Perdida o ganancia):";
-                            worksheet.Cell("B43").Value = utilidadEjercicio * -1;
-                            worksheet.Cell("B43").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+                            worksheet.Cell("A40").Value = $"Total pasivo:";
+                            worksheet.Cell("B40").Value = totalPasivo * -1;
+                            worksheet.Cell("B40").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
-                            worksheet.Cell("A45").Value = $"Total de capital:";
-                            worksheet.Cell("B45").Value = totalCapital * -1;
+                            worksheet.Cell("A42").Value = $"Capital:";
+                            worksheet.Cell("B42").Value = capital * -1;
+                            worksheet.Cell("A43").Value = $"Utilidades de años anteriores:";
+                            worksheet.Cell("B43").Value = utilidades * -1;
+                            worksheet.Cell("A44").Value = $"Reserva legal:";
+                            worksheet.Cell("B44").Value = reservaLegal * -1;
+                            worksheet.Cell("A45").Value = $"Utilidad del ejercicio (Perdida o ganancia):";
+                            worksheet.Cell("B45").Value = utilidadEjercicio * -1;
                             worksheet.Cell("B45").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+                            worksheet.Cell("C45").Value = "HAY QUE PONER UTILIDAD DEL EJERCICIO";
 
-                            worksheet.Cell("A47").Value = $"Pasivo + capital:";
-                            worksheet.Cell("B47").Value = totalFinal * -1;
+                            worksheet.Cell("A47").Value = $"Total de capital:";
+                            worksheet.Cell("B47").Value = totalCapital * -1;
                             worksheet.Cell("B47").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+                            worksheet.Cell("A49").Value = $"Pasivo + capital:";
+                            worksheet.Cell("B49").Value = totalFinal * -1;
+                            worksheet.Cell("B49").Style.Border.SetBottomBorder(XLBorderStyleValues.Double);
 
                             worksheet.Columns("A").AdjustToContents();
                             worksheet.Columns("B").AdjustToContents();
